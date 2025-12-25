@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dark Studio - Inicio</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="logo-server.png">
+    
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+
+    <div id="preloader">
+        <div class="loader-content">
+            
+            <p class="loading-text">Cargando...</p>
+            
+            <div class="progress-bar-container">
+                <div id="progressBar" class="progress-bar"></div>
+            </div>
+            
+        </div>
+    </div>
+
+    <main id="mainContent" class="hidden">
+        
+        <header class="main-header">
+            <div class="header-left">
+                <button id="menuToggle" class="menu-toggle-button">
+                    <i class="fas fa-bars"></i>
+                </button>
+                
+                <img src="logo-server.png" 
+                     alt="Logo Dark Studio" 
+                     class="server-logo" 
+                     id="serverLogo">
+            </div>
+            
+            <div class="header-right">
+                <div id="g_id_onload"
+                    data-client_id="781514177610-008n7aeftofnnhbhitnh3ti0s936f9r8.apps.googleusercontent.com" 
+                    data-context="signin"
+                    data-ux_mode="popup"
+                    data-callback="handleCredentialResponse"
+                    data-auto_prompt="false">
+                </div>
+                
+                <div class="g_id_signin"
+                    data-type="icon"
+                    data-shape="circle"
+                    data-theme="outline"
+                    data-text="signin_with"
+                    data-size="large"
+                    data-locale="es"
+                    id="googleSignInButton">
+                </div>
+
+                <div id="userProfile" class="profile-dropdown hidden-profile">
+                    <img id="profileImage" src="" alt="Foto de Perfil" class="profile-image">
+                    
+                    <div id="dropdownMenu" class="dropdown-menu hidden">
+                        <p id="dropdownName" class="dropdown-name"></p>
+                        <button id="settingsButton" class="dropdown-item settings-item">
+                            <i class="fas fa-cog"></i> Configuración
+                        </button>
+                        <button id="savedArticlesButton" class="dropdown-item saved-item">
+                            <i class="fas fa-bookmark"></i> Artículos Guardados
+                        </button>
+                        <button id="signOutButton" class="dropdown-item">
+                            <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <nav id="sidebar" class="sidebar hidden-sidebar">
+            <div class="sidebar-header">
+                <button id="closeSidebar" class="close-sidebar-button">
+                    <i class="fas fa-times"></i>
+                </button>
+                <span class="sidebar-title">Menú Principal</span>
+            </div>
+            
+            <ul class="nav-list">
+                <li>
+                    <a href="#home" class="nav-link nav-home">
+                        <i class="fas fa-home"></i> Inicio
+                    </a>
+                </li>
+                <li>
+                    <a href="#blog" class="nav-link">
+                        <i class="fas fa-question-circle"></i> Info de Ayuda (Blog/FAQ)
+                    </a>
+                </li>
+                
+                <li>
+                    <a href="#guia" class="nav-link">
+                        <i class="fas fa-book-open"></i> Ver Guía del Servidor
+                    </a>
+                </li>
+                
+                <li>
+                    <a href="#avances" class="nav-link">
+                        <i class="fas fa-calendar-alt"></i> Ver Eventos
+                    </a>
+                </li>
+            </ul>
+        </nav>
+        
+        <section class="page-content">
+            
+            <div id="home-content" class="content-section show-content">
+                <h1 class="welcome-message">BIENVENIDO A DARK STUDIO.</h1>
+                <p class="subtitle-message">Usa el menú superior izquierda para navegar.</p>
+            </div>
+            
+            <div id="blog-content" class="content-section hidden-content">
+                <h2 class="section-title">📚 Centro de Información y Ayuda (FAQ)</h2>
+                <p class="section-subtitle">Preguntas frecuentes y artículos detallados para resolver tus dudas.</p>
+                
+                <div class="blog-grid" id="blogGridContainer">
+                </div>
+                
+                <template id="blogCardTemplate">
+                    <article class="blog-card" data-article-id="">
+                        <h3 class="card-title"></h3>
+                        <p class="card-subtitle"></p>
+                        <p class="card-description"></p>
+                        
+                        <div class="card-footer">
+                            <span class="read-more">Ver artículo completo →</span>
+                            <div class="card-options">
+                                <i class="fas fa-bookmark" title="Guardar para después"></i>
+                            </div>
+                        </div>
+                    </article>
+                </template>
+                
+                <div class="suggestion-box">
+                    <div id="loginRequiredMessage" class="login-required-message">
+                        <p><i class="fas fa-exclamation-triangle"></i> Debes iniciar sesión con Google para enviar sugerencias.</p>
+                    </div>
+                    
+                    <h3>¿Tienes una duda común o sugerencia de artículo?</h3>
+                    <p>Si no encuentras lo que buscas, cuéntanos qué tema o pregunta te gustaría ver respondido en nuestro blog.</p>
+                    
+                    <form id="suggestionForm">
+                        <input type="text" 
+                               id="suggestionInput" 
+                               placeholder="Escribe tu pregunta o sugerencia aquí..." 
+                               class="suggestion-input"
+                               required
+                               minlength="10"
+                               disabled>
+                        <button type="submit" class="suggestion-button" disabled>Solicitar Artículo</button>
+                    </form>
+                    
+                    <p id="suggestionMessage" class="note"></p>
+
+                    <p class="note">Nota: Las sugerencias son revisadas por el equipo de administración.</p>
+                </div>
+            </div>
+            
+            <div id="article-view" class="content-section hidden-content">
+                <button id="backToBlog" class="back-button">
+                    <i class="fas fa-arrow-left"></i> Regresar a todos los artículos
+                </button>
+                
+                <article class="full-article-content">
+                    <h1 id="article-title" class="full-article-title"></h1>
+                    <p id="article-subtitle" class="full-article-subtitle"></p>
+                    <div id="article-body" class="full-article-body">
+                    </div>
+                </article>
+            </div>
+
+            <div id="guia-content" class="content-section hidden-content">
+                <h2 class="section-title">📖 Guía Rápida del Servidor</h2>
+                <p class="section-subtitle">Aprende los conceptos básicos y las reglas para empezar a jugar en Dark Studios.</p>
+                
+                <div class="guide-steps">
+                    <div class="step-card">
+                        <h3>1. Conexión y Launcher</h3>
+                        <p>Descarga y configura nuestro launcher oficial para asegurar la mejor experiencia y acceder a todas las funcionalidades exclusivas.</p>
+                    </div>
+                    <div class="step-card">
+                        <h3>2. Reglas Esenciales</h3>
+                        <p>Lee nuestra normativa de conducta para asegurar un ambiente de juego respetuoso y divertido. Recuerda, el uso de hacks está estrictamente prohibido.</p>
+                    </div>
+                    <div class="step-card">
+                        <h3>3. ¡Únete a un Evento!</h3>
+                        <p>Revisa la sección de Eventos para ver el calendario semanal y participar en nuestras emocionantes experiencias. ¡Te esperamos!</p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="avances-content" class="content-section hidden-content">
+                <h2 class="section-title">📅 Próximos Eventos y Avances</h2>
+                <p class="section-subtitle">Echa un vistazo a lo que viene: anuncios, fechas y sneak peeks de nuevos proyectos.</p>
+                
+                <div class="event-announcement">
+                    <h3>Dark Games Season 2: Próximamente</h3>
+                    <p>Estamos trabajando arduamente en una nueva temporada con mapas renovados, nuevos minijuegos y desafíos para nuestros jugadores más leales.</p>
+                    <p class="date">Fecha estimada: Pendiente de anuncio en Discord.</p>
+                </div>
+                
+            </div>
+
+            <!-- NUEVA SECCIÓN: Artículos Guardados -->
+            <div id="saved-articles-content" class="content-section hidden-content">
+                <h2 class="section-title">🔖 Mis Artículos Guardados</h2>
+                <p class="section-subtitle">Accede rápidamente a los artículos que has guardado para consultar más tarde.</p>
+                
+                <div id="savedArticlesContainer" class="blog-grid">
+                    <!-- Los artículos guardados se cargarán aquí dinámicamente -->
+                </div>
+                
+                <div id="noSavedArticles" class="no-saved-message" style="display: none;">
+                    <i class="fas fa-bookmark" style="font-size: 3em; color: #555; margin-bottom: 20px;"></i>
+                    <p>Aún no has guardado ningún artículo.</p>
+                    <p style="color: #777; font-size: 0.9em;">Explora el Centro de Información y haz clic en el ícono <i class="fas fa-bookmark"></i> para guardar artículos.</p>
+                </div>
+            </div>
+
+        </section>
+
+        <footer class="main-footer">
+            <p>&copy; 2025 Dark Studios. Todos los derechos reservados.</p>
+            <p class="creator-credit">Reconocimiento a Creador de Página: Checho4364</p>
+        </footer>
+
+        <!-- CONTENEDOR DE NOTIFICACIONES TOAST -->
+        <div id="toastContainer" class="toast-container"></div>
+
+        <!-- MODAL DE CONFIGURACIÓN -->
+        <div id="settingsModal" class="modal hidden-modal">
+            <div class="modal-content settings-modal-content">
+                <span class="close-button" id="closeSettingsModal">&times;</span>
+                
+                <h1>⚙️ Configuración de Perfil</h1>
+                
+                <div class="settings-section">
+                    <h3>🕐 Duración de la Pantalla de Carga</h3>
+                    <p class="settings-description">Ajusta cuánto tiempo quieres que dure la animación de carga al entrar a la página.</p>
+                    
+                    <div class="slider-container">
+                        <label for="loadTimeSlider">Tiempo: <span id="loadTimeValue">3</span> segundos</label>
+                        <input type="range" 
+                               id="loadTimeSlider" 
+                               class="load-time-slider" 
+                               min="1" 
+                               max="5" 
+                               value="3" 
+                               step="1">
+                        <div class="slider-markers">
+                            <span>1s</span>
+                            <span>2s</span>
+                            <span>3s</span>
+                            <span>4s</span>
+                            <span>5s</span>
+                        </div>
+                    </div>
+                    
+                    <p class="settings-note">
+                        <i class="fas fa-info-circle"></i> 
+                        Esta configuración se guardará en tu perfil. Si cierras sesión, volverá al valor predeterminado (3 segundos).
+                    </p>
+                </div>
+                
+                <div class="settings-footer">
+                    <button id="saveSettings" class="cookie-button">
+                        <i class="fas fa-save"></i> Guardar Configuración
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="cookieBanner" class="cookie-banner hidden-cookie">
+            <p class="cookie-text">
+                Utilizamos cookies para mejorar la experiencia del usuario y analizar el tráfico. Al hacer clic en "Aceptar", aceptas nuestra política.
+            </p>
+            <button id="acceptCookies" class="cookie-button">Aceptar</button>
+            <button id="openTermsModal" class="cookie-link-button">Más información</button>
+        </div>
+        
+    </main>
+    
+    <div id="termsModal" class="modal hidden-modal">
+        <div class="modal-content">
+            <span class="close-button" id="closeModal">&times;</span>
+            <div class="terms-scroll-area">
+                <h1>TÉRMINOS Y CONDICIONES</h1>
+                
+                <h2>Bienvenido/a a <span class="studio-name">Dark Studio</span></h2>
+                <p>Al participar en nuestra comunidad aceptas cumplir con todas las normas y políticas establecidas. Se espera un comportamiento maduro, respetuoso y responsable; está prohibido:</p>
+                <ul>
+                    <li>El acoso, la discriminación y la difusión de contenido inapropiado o ilegal.</li>
+                    <li>La distribución de material protegido sin autorización.</li>
+                    <li>El uso de exploits o hacks que afecten la integridad del servicio.</li>
+                </ul>
+                <p><span class="studio-name">Dark Studio</span> puede aplicar sanciones que incluyen advertencias, suspensión o expulsión según corresponda.</p>
+
+                <h2>Propiedad Intelectual y Privacidad</h2>
+                <p>Todo el contenido compartido dentro del servidor es propiedad del estudio o de sus autores. Está prohibida su reproducción o distribución sin autorización.</p>
+                <p>La información personal es confidencial y no debe divulgarse; cualquier filtración será sancionada.</p>
+
+                <h2>Uso de Canales</h2>
+                <p>Los canales deben usarse de manera responsable y según su propósito. Se prohíbe:</p>
+                <ul>
+                    <li>El spam y la publicidad externa no autorizada.</li>
+                    <li>El uso de enlaces peligrosos o maliciosos.</li>
+                    <li>La administración puede revisar, modificar o eliminar contenido y revocar acceso si se incumplen las normas.</li>
+                </ul>
+
+                <h2>Registro y Control de Actividad</h2>
+                <p>Al permanecer en el servidor, aceptas que tu actividad puede registrarse para fines de seguridad y control. La edad mínima es **13 años** o la legal en tu país. Desconocer estas normas no exime de responsabilidades.</p>
+
+                <h2>Aceptación de Normas</h2>
+                <p>Al continuar, confirmas haber leído y aceptado todos los puntos aquí descritos, comprometiéndote a mantener una conducta ética, profesional y respetuosa dentro de <span class="studio-name">Dark Studio</span>.</p>
+            </div>
+            <div class="modal-footer">
+                <button id="acceptTermsFinal" class="cookie-button" disabled>
+                    Aceptar y Guardar Preferencia
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="blog-data.js"></script> 
+    <script src="script.js"></script>
+</body>
+</html>
