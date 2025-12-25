@@ -221,27 +221,40 @@ document.addEventListener('DOMContentLoaded', () => {
     // Variable para almacenar el toast actual
     let currentToast = null;
     
-    // Sistema de notificaciones toast (MODIFICADO)
-    const showToast = (title, message, isRemove = false) => {
+    // Sistema de notificaciones toast (CORREGIDO - SUPERPOSICIÓN)
+    const showToast = (title, message, type = 'bookmark') => {
         const toastContainer = document.getElementById('toastContainer');
         
-        // Si hay un toast actual, ocultarlo y eliminarlo inmediatamente
+        // Si hay un toast actual, eliminarlo COMPLETAMENTE del DOM de inmediato
         if (currentToast && currentToast.parentNode) {
-            currentToast.classList.remove('show');
-            currentToast.classList.add('hide');
-            
-            // Eliminar después de la animación
-            setTimeout(() => {
-                if (currentToast && currentToast.parentNode) {
-                    currentToast.parentNode.removeChild(currentToast);
-                }
-            }, 400);
+            currentToast.parentNode.removeChild(currentToast);
+            currentToast = null;
         }
         
         const toast = document.createElement('div');
-        toast.className = `toast ${isRemove ? 'toast-remove' : ''}`;
         
-        const icon = isRemove ? 'fa-bookmark-slash' : 'fa-bookmark';
+        // Determinar el tipo de notificación y aplicar clases apropiadas
+        if (type === 'suggestion-success') {
+            toast.className = 'toast toast-suggestion';
+        } else if (type === 'suggestion-error') {
+            toast.className = 'toast toast-error';
+        } else if (type === 'bookmark-remove') {
+            toast.className = 'toast toast-remove';
+        } else {
+            toast.className = 'toast';
+        }
+        
+        // Determinar el ícono según el tipo
+        let icon;
+        if (type === 'suggestion-success') {
+            icon = 'fa-check-circle';
+        } else if (type === 'suggestion-error') {
+            icon = 'fa-exclamation-circle';
+        } else if (type === 'bookmark-remove') {
+            icon = 'fa-bookmark-slash';
+        } else {
+            icon = 'fa-bookmark';
+        }
         
         toast.innerHTML = `
             <i class="fas ${icon} toast-icon"></i>
@@ -329,7 +342,7 @@ document.addEventListener('DOMContentLoaded', () => {
             showToast(
                 '📋 Artículo eliminado',
                 `"${articleTitle}" fue removido de tus guardados.`,
-                true
+                'bookmark-remove'
             );
         } else {
             // Agregar a guardados
@@ -341,7 +354,7 @@ document.addEventListener('DOMContentLoaded', () => {
             showToast(
                 '✨ Artículo guardado',
                 `"${articleTitle}" está ahora en tus favoritos.`,
-                false
+                'bookmark'
             );
         }
         
@@ -454,7 +467,7 @@ document.addEventListener('DOMContentLoaded', () => {
             showToast(
                 '⚠️ Error en sugerencia',
                 'La sugerencia debe tener al menos 10 caracteres.',
-                true
+                'suggestion-error'
             );
             return;
         }
@@ -487,7 +500,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 showToast(
                     '✅ Sugerencia enviada',
                     `¡Gracias, ${userName || 'Usuario'}! La revisaremos pronto.`,
-                    false
+                    'suggestion-success'
                 );
                 suggestionInput.value = ''; 
             } else {
@@ -495,7 +508,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 showToast(
                     '❌ Error al enviar',
                     data.message || 'No se pudo enviar la sugerencia.',
-                    true
+                    'suggestion-error'
                 );
             }
             
@@ -504,7 +517,7 @@ document.addEventListener('DOMContentLoaded', () => {
             showToast(
                 '❌ Error de conexión',
                 'No se pudo conectar con el servidor. Intenta nuevamente.',
-                true
+                'suggestion-error'
             );
         } finally {
             // Rehabilitar el botón
