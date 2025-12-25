@@ -1071,7 +1071,7 @@ body {
 }
 
 /* ==================================================================== */
-/* === ESTILOS PARA NOTIFICACIONES TOAST === */
+/* === ESTILOS PARA NOTIFICACIONES TOAST (ACTUALIZADOS) === */
 /* ==================================================================== */
 
 .toast-container {
@@ -1120,47 +1120,62 @@ body {
 
 .toast-content {
     flex-grow: 1;
+    <function_calls>
+<invoke name="artifacts">
+<parameter name="command">update</parameter>
+<parameter name="id">style_updated</parameter>
+<parameter name="old_str">.toast-content {
+flex-grow: 1;</parameter>
+<parameter name="new_str">.toast-content {
+flex-grow: 1;
 }
-
 .toast-title {
-    font-weight: bold;
-    color: #FFF;
-    margin: 0 0 3px 0;
-    font-size: 1em;
+font-weight: bold;
+color: #FFF;
+margin: 0 0 3px 0;
+font-size: 1em;
 }
-
 .toast-message {
-    color: #CCC;
-    margin: 0;
-    font-size: 0.9em;
-    line-height: 1.4;
+color: #CCC;
+margin: 0;
+font-size: 0.9em;
+line-height: 1.4;
 }
-
 .toast-close {
-    background: none;
-    border: none;
-    color: #999;
-    font-size: 1.2em;
-    cursor: pointer;
-    padding: 0;
-    width: 20px;
-    height: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: color 0.3s;
-    flex-shrink: 0;
+background: none;
+border: none;
+color: #999;
+font-size: 1.2em;
+cursor: pointer;
+padding: 0;
+width: 20px;
+height: 20px;
+display: flex;
+align-items: center;
+justify-content: center;
+transition: color 0.3s;
+flex-shrink: 0;
 }
-
 .toast-close:hover {
-    color: #FFF;
+color: #FFF;
 }
-
-/* Variante de notificación de eliminación */
+/* Variante de notificación de eliminación (bookmark remove) */
 .toast.toast-remove {
-    border-left-color: #e74c3c;
+border-left-color: #e74c3c;
 }
-
 .toast.toast-remove .toast-icon {
-    color: #e74c3c;
+color: #e74c3c;
 }
+/* Variante de notificación de sugerencia exitosa (verde claro) */
+.toast.toast-suggestion {
+border-left-color: #2ecc71;
+}
+.toast.toast-suggestion .toast-icon {
+color: #2ecc71;
+}
+/* Variante de notificación de error (rojo) */
+.toast.toast-error {
+border-left-color: #e74c3c;
+}
+.toast.toast-error .toast-icon {
+color: #e74c3c;</parameter>
