@@ -218,9 +218,25 @@ document.addEventListener('DOMContentLoaded', () => {
     // FUNCIONES PARA GESTIÓN DE ARTÍCULOS GUARDADOS
     // ===================================================
     
-    // Sistema de notificaciones toast
+    // Variable para almacenar el toast actual
+    let currentToast = null;
+    
+    // Sistema de notificaciones toast (MODIFICADO)
     const showToast = (title, message, isRemove = false) => {
         const toastContainer = document.getElementById('toastContainer');
+        
+        // Si hay un toast actual, ocultarlo y eliminarlo inmediatamente
+        if (currentToast && currentToast.parentNode) {
+            currentToast.classList.remove('show');
+            currentToast.classList.add('hide');
+            
+            // Eliminar después de la animación
+            setTimeout(() => {
+                if (currentToast && currentToast.parentNode) {
+                    currentToast.parentNode.removeChild(currentToast);
+                }
+            }, 400);
+        }
         
         const toast = document.createElement('div');
         toast.className = `toast ${isRemove ? 'toast-remove' : ''}`;
@@ -237,6 +253,9 @@ document.addEventListener('DOMContentLoaded', () => {
         `;
         
         toastContainer.appendChild(toast);
+        
+        // Guardar referencia al toast actual
+        currentToast = toast;
         
         // Mostrar con animación
         setTimeout(() => {
@@ -256,12 +275,18 @@ document.addEventListener('DOMContentLoaded', () => {
     };
     
     const removeToast = (toast) => {
+        if (!toast || !toast.parentNode) return;
+        
         toast.classList.remove('show');
         toast.classList.add('hide');
         
         setTimeout(() => {
             if (toast.parentNode) {
                 toast.parentNode.removeChild(toast);
+            }
+            // Limpiar referencia si es el toast actual
+            if (currentToast === toast) {
+                currentToast = null;
             }
         }, 400);
     };
@@ -414,25 +439,28 @@ document.addEventListener('DOMContentLoaded', () => {
     loadBlogArticles(); 
 
     // ===================================================
-    // 4. LÓGICA DE SUGERENCIAS (Requiere Login)
+    // 4. LÓGICA DE SUGERENCIAS (Requiere Login) - MODIFICADO
     // ===================================================
 
     const suggestionForm = document.getElementById('suggestionForm');
     const suggestionInput = document.getElementById('suggestionInput');
     const suggestionButton = suggestionForm.querySelector('.suggestion-button');
-    const suggestionMessage = document.getElementById('suggestionMessage');
     const loginRequiredMessage = document.getElementById('loginRequiredMessage');
 
     suggestionForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         
         if (!suggestionInput.value.trim() || suggestionInput.value.length < 10) {
-            suggestionMessage.textContent = "Error: La sugerencia debe tener al menos 10 caracteres.";
-            suggestionMessage.style.color = '#e74c3c';
+            showToast(
+                '⚠️ Error en sugerencia',
+                'La sugerencia debe tener al menos 10 caracteres.',
+                true
+            );
             return;
         }
 
         const userEmail = localStorage.getItem('userEmail');
+        const userName = localStorage.getItem('userName');
         const suggestionText = suggestionInput.value.trim();
         
         // Deshabilitar el botón mientras se envía
@@ -455,26 +483,33 @@ document.addEventListener('DOMContentLoaded', () => {
             const data = await response.json();
             
             if (data.status === 'success') {
-                suggestionMessage.textContent = `¡Sugerencia enviada! Gracias, ${userEmail || 'Usuario'}. La revisaremos pronto.`;
-                suggestionMessage.style.color = '#2ecc71';
+                // Mostrar notificación de éxito
+                showToast(
+                    '✅ Sugerencia enviada',
+                    `¡Gracias, ${userName || 'Usuario'}! La revisaremos pronto.`,
+                    false
+                );
                 suggestionInput.value = ''; 
             } else {
-                suggestionMessage.textContent = `Error: ${data.message}`;
-                suggestionMessage.style.color = '#e74c3c';
+                // Mostrar notificación de error
+                showToast(
+                    '❌ Error al enviar',
+                    data.message || 'No se pudo enviar la sugerencia.',
+                    true
+                );
             }
             
         } catch (error) {
             console.error('Error al enviar sugerencia:', error);
-            suggestionMessage.textContent = 'Error de conexión. Intenta nuevamente.';
-            suggestionMessage.style.color = '#e74c3c';
+            showToast(
+                '❌ Error de conexión',
+                'No se pudo conectar con el servidor. Intenta nuevamente.',
+                true
+            );
         } finally {
             // Rehabilitar el botón
             suggestionButton.disabled = false;
             suggestionButton.textContent = 'Solicitar Artículo';
-            
-            setTimeout(() => {
-                suggestionMessage.textContent = '';
-            }, 5000);
         }
     });
     
