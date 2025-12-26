@@ -1194,3 +1194,16 @@ body {
 .toast.toast-error .toast-close {
     color: #e74c3c; /* X ROJA */
 }
+
+/* Variante de notificación de información/advertencia (blanca) */
+.toast.toast-info {
+    border-left-color: #ffffff;
+}
+
+.toast.toast-info .toast-icon {
+    color: #ffffff;
+}
+
+.toast.toast-info .toast-close {
+    color: #ffffff; /* X BLANCA */
+}
