@@ -210,7 +210,7 @@
                 
             </div>
 
-            <!-- NUEVA SECCIÓN: Artículos Guardados -->
+            <!-- SECCIÓN: Artículos Guardados -->
             <div id="saved-articles-content" class="content-section hidden-content">
                 <h2 class="section-title">🔖 Mis Artículos Guardados</h2>
                 <p class="section-subtitle">Accede rápidamente a los artículos que has guardado para consultar más tarde.</p>
@@ -274,6 +274,25 @@
                 <div class="settings-footer">
                     <button id="saveSettings" class="cookie-button">
                         <i class="fas fa-save"></i> Guardar Configuración
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- MODAL DE PREVISUALIZACIÓN DE ARTÍCULO -->
+        <div id="previewModal" class="modal hidden-modal">
+            <div class="modal-content preview-modal-content">
+                <span class="close-button" id="closePreviewModal">&times;</span>
+                
+                <article class="preview-article-content">
+                    <h1 id="preview-title" class="preview-article-title"></h1>
+                    <p id="preview-subtitle" class="preview-article-subtitle"></p>
+                    <div id="preview-body" class="preview-article-body"></div>
+                </article>
+                
+                <div class="preview-footer">
+                    <button id="goToFullArticle" class="preview-button">
+                        <i class="fas fa-external-link-alt"></i> Ver Artículo Completo en FAQ
                     </button>
                 </div>
             </div>
