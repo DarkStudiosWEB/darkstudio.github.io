@@ -240,6 +240,8 @@ document.addEventListener('DOMContentLoaded', () => {
             toast.className = 'toast toast-error';
         } else if (type === 'bookmark-remove') {
             toast.className = 'toast toast-remove';
+        } else if (type === 'info') {
+            toast.className = 'toast toast-info';
         } else {
             toast.className = 'toast';
         }
@@ -252,6 +254,8 @@ document.addEventListener('DOMContentLoaded', () => {
             icon = 'fa-exclamation-circle';
         } else if (type === 'bookmark-remove') {
             icon = 'fa-bookmark-slash';
+        } else if (type === 'info') {
+            icon = 'fa-info-circle';
         } else {
             icon = 'fa-bookmark';
         }
@@ -322,7 +326,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const toggleSaveArticle = (articleId, iconElement) => {
         const userEmail = localStorage.getItem('userEmail');
         if (!userEmail) {
-            alert('Debes iniciar sesión para guardar artículos');
+            // CORRECCIÓN: Cambiar alert() por notificación toast
+            showToast(
+                '🔒 Inicio de sesión requerido',
+                'Debes iniciar sesión con Google para guardar artículos.',
+                'info'
+            );
             return;
         }
         
