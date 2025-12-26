@@ -179,22 +179,195 @@
             </div>
 
             <div id="guia-content" class="content-section hidden-content">
-                <h2 class="section-title">📖 Guía Rápida del Servidor</h2>
-                <p class="section-subtitle">Aprende los conceptos básicos y las reglas para empezar a jugar en Dark Studios.</p>
+                <h2 class="section-title">📚 Centro de Guías</h2>
+                <p class="section-subtitle">Todo lo que necesitas saber para aprovechar al máximo tu experiencia en Dark Studio.</p>
                 
-                <div class="guide-steps">
-                    <div class="step-card">
-                        <h3>1. Conexión y Launcher</h3>
-                        <p>Descarga y configura nuestro launcher oficial para asegurar la mejor experiencia y acceder a todas las funcionalidades exclusivas.</p>
+                <div class="guides-container">
+                    
+                    <!-- GUÍA 1: Discord -->
+                    <div class="guide-card" data-guide="discord">
+                        <div class="guide-header">
+                            <div class="guide-icon">
+                                <i class="fab fa-discord"></i>
+                            </div>
+                            <div class="guide-info">
+                                <h3 class="guide-title">Guía de Discord</h3>
+                                <p class="guide-summary">Aprende a navegar por nuestro servidor de Discord, activa canales y conoce las reglas.</p>
+                            </div>
+                            <button class="guide-toggle">
+                                <i class="fas fa-chevron-down"></i>
+                            </button>
+                        </div>
+                        
+                        <div class="guide-content">
+                            <div class="guide-section">
+                                <h4><i class="fas fa-link"></i> Enlace al Servidor</h4>
+                                <p>Únete a nuestra comunidad en <a href="https://discord.gg/guedx4zmXm" target="_blank" class="discord-link">Discord</a> para estar al día con todos los eventos, anuncios y conectar con otros jugadores.</p>
+                            </div>
+                            
+                            <div class="guide-section">
+                                <h4><i class="fas fa-gavel"></i> Reglas del Servidor</h4>
+                                <ul class="guide-list">
+                                    <li><strong>Respeto mutuo:</strong> Trata a todos los miembros con respeto. No se toleran insultos, acoso ni discriminación de ningún tipo.</li>
+                                    <li><strong>Sin spam:</strong> Evita enviar mensajes repetitivos, publicidad no autorizada o flood en los canales.</li>
+                                    <li><strong>Contenido apropiado:</strong> Mantén el contenido adecuado para todas las edades. No compartas material explícito o inapropiado.</li>
+                                    <li><strong>Usa los canales correctos:</strong> Lee las descripciones de cada canal y publica tu contenido en el lugar apropiado.</li>
+                                    <li><strong>No spoilers:</strong> Si vas a hablar de contenido que puede arruinar la experiencia de otros, usa las etiquetas de spoiler.</li>
+                                    <li><strong>Sigue las indicaciones del staff:</strong> Los moderadores y administradores están aquí para ayudar. Respeta sus decisiones.</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="guide-section">
+                                <h4><i class="fas fa-power-off"></i> Cómo Activar Todos los Canales</h4>
+                                <p>Al unirte al servidor, algunos canales pueden estar ocultos. Para acceder a todos los canales disponibles:</p>
+                                <ol class="guide-steps-list">
+                                    <li>Ve al canal <strong>#roles</strong> o <strong>#bienvenida</strong></li>
+                                    <li>Busca el mensaje con los roles de acceso (usualmente tiene emojis o botones)</li>
+                                    <li>Reacciona con los emojis correspondientes o haz clic en los botones para obtener roles</li>
+                                    <li>Los canales se desbloquearán automáticamente según los roles que elijas</li>
+                                    <li>Si tienes problemas, contacta a un moderador en <strong>#soporte</strong></li>
+                                </ol>
+                            </div>
+                            
+                            <div class="guide-section">
+                                <h4><i class="fas fa-comments"></i> Descripción de Canales Principales</h4>
+                                <div class="channel-grid">
+                                    <div class="channel-item">
+                                        <div class="channel-name"><i class="fas fa-bullhorn"></i> #anuncios</div>
+                                        <p>Noticias oficiales, actualizaciones del servidor y comunicados importantes del staff.</p>
+                                    </div>
+                                    <div class="channel-item">
+                                        <div class="channel-name"><i class="fas fa-calendar"></i> #eventos</div>
+                                        <p>Información sobre próximos eventos, torneos y actividades especiales del servidor.</p>
+                                    </div>
+                                    <div class="channel-item">
+                                        <div class="channel-name"><i class="fas fa-comment-dots"></i> #chat-general</div>
+                                        <p>El corazón de la comunidad. Habla con otros miembros sobre cualquier tema.</p>
+                                    </div>
+                                    <div class="channel-item">
+                                        <div class="channel-name"><i class="fas fa-gamepad"></i> #chat-gaming</div>
+                                        <p>Discute sobre videojuegos, comparte logros y busca compañeros de juego.</p>
+                                    </div>
+                                    <div class="channel-item">
+                                        <div class="channel-name"><i class="fas fa-question-circle"></i> #soporte</div>
+                                        <p>¿Tienes dudas o problemas? El staff y la comunidad están aquí para ayudarte.</p>
+                                    </div>
+                                    <div class="channel-item">
+                                        <div class="channel-name"><i class="fas fa-lightbulb"></i> #sugerencias</div>
+                                        <p>Comparte tus ideas para mejorar el servidor. ¡Tu opinión es importante!</p>
+                                    </div>
+                                    <div class="channel-item">
+                                        <div class="channel-name"><i class="fas fa-image"></i> #multimedia</div>
+                                        <p>Comparte imágenes, videos, memes y contenido creativo con la comunidad.</p>
+                                    </div>
+                                    <div class="channel-item">
+                                        <div class="channel-name"><i class="fas fa-microphone"></i> Canales de Voz</div>
+                                        <p>Únete a las salas de voz para charlar, jugar o participar en eventos en vivo.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="step-card">
-                        <h3>2. Reglas Esenciales</h3>
-                        <p>Lee nuestra normativa de conducta para asegurar un ambiente de juego respetuoso y divertido. Recuerda, el uso de hacks está estrictamente prohibido.</p>
+                    
+                    <!-- GUÍA 2: Redes Sociales -->
+                    <div class="guide-card" data-guide="social">
+                        <div class="guide-header">
+                            <div class="guide-icon social-icon">
+                                <i class="fas fa-share-alt"></i>
+                            </div>
+                            <div class="guide-info">
+                                <h3 class="guide-title">Redes Sociales</h3>
+                                <p class="guide-summary">Síguenos en nuestras redes para contenido exclusivo, actualizaciones y más.</p>
+                            </div>
+                            <button class="guide-toggle">
+                                <i class="fas fa-chevron-down"></i>
+                            </button>
+                        </div>
+                        
+                        <div class="guide-content">
+                            <div class="guide-section">
+                                <h4><i class="fas fa-globe"></i> Nuestras Plataformas</h4>
+                                <p>Dark Studio está presente en múltiples plataformas para mantenerte conectado con todo lo que sucede en nuestra comunidad.</p>
+                            </div>
+                            
+                            <div class="social-networks">
+                                <div class="social-card twitter-card">
+                                    <div class="social-header">
+                                        <i class="fab fa-x-twitter"></i>
+                                        <h5>X (Twitter)</h5>
+                                    </div>
+                                    <p class="social-description">Actualizaciones rápidas, noticias del servidor y anuncios importantes.</p>
+                                    <a href="https://x.com/darkstudio51719" target="_blank" class="social-button twitter-button">
+                                        <i class="fas fa-external-link-alt"></i> Seguir en X
+                                    </a>
+                                    <div class="social-content-info">
+                                        <strong>Qué publicamos:</strong>
+                                        <ul>
+                                            <li>Anuncios de eventos y torneos</li>
+                                            <li>Actualizaciones del servidor</li>
+                                            <li>Momentos destacados de la comunidad</li>
+                                            <li>Sorteos y concursos exclusivos</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                
+                                <div class="social-card discord-card">
+                                    <div class="social-header">
+                                        <i class="fab fa-discord"></i>
+                                        <h5>Discord</h5>
+                                    </div>
+                                    <p class="social-description">El corazón de nuestra comunidad. Chatea, juega y participa en eventos en tiempo real.</p>
+                                    <a href="https://discord.gg/guedx4zmXm" target="_blank" class="social-button discord-button">
+                                        <i class="fas fa-external-link-alt"></i> Unirse al Discord
+                                    </a>
+                                    <div class="social-content-info">
+                                        <strong>Qué encontrarás:</strong>
+                                        <ul>
+                                            <li>Chat en vivo con la comunidad</li>
+                                            <li>Canales de voz para jugar juntos</li>
+                                            <li>Soporte técnico directo</li>
+                                            <li>Eventos exclusivos y actividades</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="guide-section">
+                                <h4><i class="fas fa-bell"></i> Mantente Informado</h4>
+                                <p>Para no perderte ninguna actualización importante:</p>
+                                <ul class="guide-list">
+                                    <li>Activa las notificaciones en Discord para el canal <strong>#anuncios</strong></li>
+                                    <li>Síguenos en X y activa las notificaciones de nuestros tweets</li>
+                                    <li>Revisa regularmente esta página web para ver nuevos artículos y guías</li>
+                                </ul>
+                            </div>
+                        </div>
                     </div>
-                    <div class="step-card">
-                        <h3>3. ¡Únete a un Evento!</h3>
-                        <p>Revisa la sección de Eventos para ver el calendario semanal y participar en nuestras emocionantes experiencias. ¡Te esperamos!</p>
+                    
+                    <!-- PLANTILLA PARA FUTURAS GUÍAS (Comentada)
+                    <div class="guide-card" data-guide="nueva">
+                        <div class="guide-header">
+                            <div class="guide-icon">
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <div class="guide-info">
+                                <h3 class="guide-title">Título de Nueva Guía</h3>
+                                <p class="guide-summary">Descripción breve de lo que trata esta guía.</p>
+                            </div>
+                            <button class="guide-toggle">
+                                <i class="fas fa-chevron-down"></i>
+                            </button>
+                        </div>
+                        
+                        <div class="guide-content">
+                            <div class="guide-section">
+                                <h4><i class="fas fa-info-circle"></i> Sección 1</h4>
+                                <p>Contenido aquí...</p>
+                            </div>
+                        </div>
                     </div>
+                    -->
+                    
                 </div>
             </div>
 
