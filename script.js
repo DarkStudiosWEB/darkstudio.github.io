@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     
     // ===================================================
-    // 1. GESTIÓN DEL PRELOADER (Ajustado para forzar los 3 segundos)
+    // 1. GESTIÓN DEL PRELOADER
     // ===================================================
 
     const preloader = document.getElementById('preloader');
@@ -9,20 +9,18 @@ document.addEventListener('DOMContentLoaded', () => {
     const progressBar = document.getElementById('progressBar');
     const loadingText = document.querySelector('.loading-text');
 
-    const MIN_LOAD_TIME = 3000; // Mínimo 3 segundos (será configurable)
-    const INTERVAL_MS = 50;     // Intervalo de actualización de la barra
+    const MIN_LOAD_TIME = 3000;
+    const INTERVAL_MS = 50;
     let isLoaded = false;
     let progress = 0;
     
-    // Obtener tiempo de carga configurado por el usuario (si está logueado)
     const getUserLoadTime = () => {
         const savedTime = localStorage.getItem('userLoadTime');
-        return savedTime ? parseInt(savedTime) * 1000 : 3000; // Por defecto 3 segundos
+        return savedTime ? parseInt(savedTime) * 1000 : 3000;
     };
     
     const loadTime = getUserLoadTime();
 
-    // Simulación de progreso de carga (hasta el 90%)
     const progressInterval = setInterval(() => {
         if (progress < 90) {
             progress += 1; 
@@ -31,18 +29,15 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }, INTERVAL_MS);
 
-    // Función que se llama cuando el tiempo mínimo ha pasado
     const finishLoading = () => {
-        if (isLoaded) return; // Evitar llamadas dobles
+        if (isLoaded) return;
 
         isLoaded = true;
         clearInterval(progressInterval);
         
-        // Completar la barra de progreso
         progressBar.style.width = '100%';
         loadingText.textContent = `Carga completa.`;
 
-        // Ocultar preloader con fade-out
         setTimeout(() => {
             preloader.classList.add('fade-out');
             
@@ -50,15 +45,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 preloader.classList.add('hidden');
                 mainContent.classList.remove('hidden');
                 
-                // Muestra la sección HOME después de la carga
                 showSection('home-content');
                 
             }, { once: true });
             
-        }, 500); // 0.5s de pausa final
+        }, 500);
     };
 
-    // Forzar el tiempo configurado por el usuario
     setTimeout(() => {
         finishLoading();
     }, loadTime);
@@ -78,7 +71,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const backToBlogButton = document.getElementById('backToBlog');
     const serverLogo = document.getElementById('serverLogo'); 
 
-    // Función principal para mostrar/ocultar secciones de nivel superior
     const showSection = (sectionId) => {
         contentSections.forEach(section => {
             section.classList.add('hidden-content');
@@ -91,8 +83,6 @@ document.addEventListener('DOMContentLoaded', () => {
             targetSection.classList.add('show-content');
         }
         
-        // CORRECCIÓN CLAVE: Asegurar que el article-view siempre se oculte, 
-        // a menos que sea la sección de article-view (lo cual solo pasa al hacer clic en un artículo)
         if (sectionId !== 'article-view') { 
             articleView.classList.add('hidden-content');
             articleView.classList.remove('show-content');
@@ -106,7 +96,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 400); 
     };
     
-    // Manejar la apertura/cierre del Sidebar
     menuToggle.addEventListener('click', () => {
         sidebar.classList.add('show');
         sidebar.classList.remove('hidden-sidebar');
@@ -114,13 +103,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     closeSidebar.addEventListener('click', closeSidebarPanel);
     
-    // Clic en el logo para ir al Home
     serverLogo.addEventListener('click', () => {
         showSection('home-content');
         closeSidebarPanel();
     });
 
-    // Manejar la navegación por enlaces
     navLinks.forEach(link => {
         link.addEventListener('click', (e) => {
             e.preventDefault();
@@ -129,7 +116,6 @@ document.addEventListener('DOMContentLoaded', () => {
             
             showSection(targetId);
             
-            // Cerrar sidebar tras navegar
             closeSidebarPanel();
         });
     });
@@ -138,15 +124,13 @@ document.addEventListener('DOMContentLoaded', () => {
     // FUNCIÓN AUXILIAR: Convertir markdown a HTML
     // ===================================================
     const convertMarkdownToHTML = (text) => {
-        // Primero convertir **texto** a <strong>texto</strong> (negrilla)
         text = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-        // Luego convertir *texto* a <em>texto</em> (cursiva/itálica)
         text = text.replace(/\*(.*?)\*/g, '<em>$1</em>');
         return text;
     };
 
     // ===================================================
-    // 3. LÓGICA DEL BLOG Y VISTA DE ARTÍCULO (CORREGIDA)
+    // 3. LÓGICA DEL BLOG Y VISTA DE ARTÍCULO
     // ===================================================
 
     const blogGridContainer = document.getElementById('blogGridContainer');
@@ -158,7 +142,6 @@ document.addEventListener('DOMContentLoaded', () => {
             
             let sortedArticles = [...articles];
             
-            // Lógica de ordenamiento: Los 'isPinned: true' van primero
             sortedArticles.sort((a, b) => {
                 if (a.isPinned && !b.isPinned) return -1;
                 if (!a.isPinned && b.isPinned) return 1;
@@ -172,7 +155,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 card.dataset.articleId = article.id;
                 
-                // Si está fijado, añadir un icono visual
                 if (article.isPinned) {
                     clone.querySelector('.card-title').innerHTML = `📌 ${article.title}`;
                 } else {
@@ -187,15 +169,12 @@ document.addEventListener('DOMContentLoaded', () => {
                                   : article.description;
                 clone.querySelector('.card-description').textContent = description;
 
-                // Evento de clic para mostrar el artículo completo
                 card.addEventListener('click', (e) => {
-                    // Evitar que el clic en el botón de guardar active el artículo
                     if (!e.target.closest('.fa-bookmark')) {
                         displayArticle(article);
                     }
                 });
 
-                // Configurar el botón de guardado
                 const bookmarkIcon = clone.querySelector('.fa-bookmark');
                 const savedArticles = getSavedArticles();
                 
@@ -218,14 +197,11 @@ document.addEventListener('DOMContentLoaded', () => {
     // FUNCIONES PARA GESTIÓN DE ARTÍCULOS GUARDADOS
     // ===================================================
     
-    // Variable para almacenar el toast actual
     let currentToast = null;
     
-    // Sistema de notificaciones toast (CORREGIDO - SUPERPOSICIÓN)
     const showToast = (title, message, type = 'bookmark') => {
         const toastContainer = document.getElementById('toastContainer');
         
-        // Si hay un toast actual, eliminarlo COMPLETAMENTE del DOM de inmediato
         if (currentToast && currentToast.parentNode) {
             currentToast.parentNode.removeChild(currentToast);
             currentToast = null;
@@ -233,7 +209,6 @@ document.addEventListener('DOMContentLoaded', () => {
         
         const toast = document.createElement('div');
         
-        // Determinar el tipo de notificación y aplicar clases apropiadas
         if (type === 'suggestion-success') {
             toast.className = 'toast toast-suggestion';
         } else if (type === 'suggestion-error') {
@@ -246,7 +221,6 @@ document.addEventListener('DOMContentLoaded', () => {
             toast.className = 'toast';
         }
         
-        // Determinar el ícono según el tipo
         let icon;
         if (type === 'suggestion-success') {
             icon = 'fa-check-circle';
@@ -271,21 +245,17 @@ document.addEventListener('DOMContentLoaded', () => {
         
         toastContainer.appendChild(toast);
         
-        // Guardar referencia al toast actual
         currentToast = toast;
         
-        // Mostrar con animación
         setTimeout(() => {
             toast.classList.add('show');
         }, 10);
         
-        // Configurar botón de cerrar
         const closeButton = toast.querySelector('.toast-close');
         closeButton.addEventListener('click', () => {
             removeToast(toast);
         });
         
-        // Auto-ocultar después de 4 segundos
         setTimeout(() => {
             removeToast(toast);
         }, 4000);
@@ -301,7 +271,6 @@ document.addEventListener('DOMContentLoaded', () => {
             if (toast.parentNode) {
                 toast.parentNode.removeChild(toast);
             }
-            // Limpiar referencia si es el toast actual
             if (currentToast === toast) {
                 currentToast = null;
             }
@@ -326,7 +295,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const toggleSaveArticle = (articleId, iconElement) => {
         const userEmail = localStorage.getItem('userEmail');
         if (!userEmail) {
-            // CORRECCIÓN: Cambiar alert() por notificación toast
             showToast(
                 '🔒 Inicio de sesión requerido',
                 'Debes iniciar sesión con Google para guardar artículos.',
@@ -337,29 +305,24 @@ document.addEventListener('DOMContentLoaded', () => {
         
         let savedArticles = getSavedArticles();
         
-        // Buscar el título del artículo para mostrarlo en la notificación
         const article = articles.find(a => a.id === articleId);
         const articleTitle = article ? article.title : 'Artículo';
         
         if (savedArticles.includes(articleId)) {
-            // Quitar de guardados
             savedArticles = savedArticles.filter(id => id !== articleId);
             iconElement.classList.remove('saved');
             iconElement.title = 'Guardar para después';
             
-            // Mostrar notificación de eliminación
             showToast(
                 '📋 Artículo eliminado',
                 `"${articleTitle}" fue removido de tus guardados.`,
                 'bookmark-remove'
             );
         } else {
-            // Agregar a guardados
             savedArticles.push(articleId);
             iconElement.classList.add('saved');
             iconElement.title = 'Guardado - Clic para quitar';
             
-            // Mostrar notificación de guardado
             showToast(
                 '✨ Artículo guardado',
                 `"${articleTitle}" está ahora en tus favoritos.`,
@@ -369,6 +332,53 @@ document.addEventListener('DOMContentLoaded', () => {
         
         setSavedArticles(savedArticles);
     };
+    
+    // ===================================================
+    // NUEVA FUNCIÓN: Mostrar previsualización del artículo
+    // ===================================================
+    
+    const previewModal = document.getElementById('previewModal');
+    const closePreviewModal = document.getElementById('closePreviewModal');
+    const goToFullArticle = document.getElementById('goToFullArticle');
+    let currentPreviewArticle = null;
+    
+    const showArticlePreview = (article) => {
+        currentPreviewArticle = article;
+        
+        document.getElementById('preview-title').textContent = article.title;
+        document.getElementById('preview-subtitle').textContent = article.subtitle;
+        
+        const contentWithFormatting = convertMarkdownToHTML(article.content);
+        document.getElementById('preview-body').innerHTML = contentWithFormatting;
+        
+        previewModal.classList.remove('hidden-modal');
+    };
+    
+    const closePreviewModalFunc = () => {
+        previewModal.classList.add('hidden-modal');
+        currentPreviewArticle = null;
+    };
+    
+    closePreviewModal.addEventListener('click', closePreviewModalFunc);
+    
+    previewModal.addEventListener('click', (e) => {
+        if (e.target === previewModal) {
+            closePreviewModalFunc();
+        }
+    });
+    
+    goToFullArticle.addEventListener('click', () => {
+        if (currentPreviewArticle) {
+            closePreviewModalFunc();
+            showSection('blog-content');
+            displayArticle(currentPreviewArticle);
+            closeSidebarPanel();
+        }
+    });
+    
+    // ===================================================
+    // CARGAR ARTÍCULOS GUARDADOS (MODIFICADO PARA PREVIEW)
+    // ===================================================
     
     const loadSavedArticles = () => {
         const savedArticlesContainer = document.getElementById('savedArticlesContainer');
@@ -384,7 +394,6 @@ document.addEventListener('DOMContentLoaded', () => {
         
         noSavedMessage.style.display = 'none';
         
-        // Filtrar los artículos guardados
         const savedArticlesData = articles.filter(article => savedArticleIds.includes(article.id));
         
         savedArticlesData.forEach(article => {
@@ -403,14 +412,13 @@ document.addEventListener('DOMContentLoaded', () => {
                               : article.description;
             clone.querySelector('.card-description').textContent = description;
 
-            // Evento de clic para mostrar el artículo completo
+            // CAMBIO CLAVE: En lugar de abrir el artículo completo, mostrar previsualización
             card.addEventListener('click', (e) => {
                 if (!e.target.closest('.fa-bookmark')) {
-                    displayArticle(article);
+                    showArticlePreview(article);
                 }
             });
 
-            // Configurar el botón de guardado (siempre estará marcado aquí)
             const bookmarkIcon = clone.querySelector('.fa-bookmark');
             bookmarkIcon.classList.add('saved');
             bookmarkIcon.title = 'Guardado - Clic para quitar';
@@ -418,7 +426,6 @@ document.addEventListener('DOMContentLoaded', () => {
             bookmarkIcon.addEventListener('click', (e) => {
                 e.stopPropagation();
                 toggleSaveArticle(article.id, bookmarkIcon);
-                // Recargar la lista después de quitar
                 setTimeout(() => loadSavedArticles(), 100);
             });
 
@@ -426,16 +433,14 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     };
 
-    // Función para mostrar el contenido de un artículo
+    // Función para mostrar el contenido de un artículo (desde FAQ)
     const displayArticle = (article) => {
         document.getElementById('article-title').textContent = article.title;
         document.getElementById('article-subtitle').textContent = article.subtitle;
         
-        // CORRECCIÓN: Convertir markdown a HTML antes de mostrar
         const contentWithFormatting = convertMarkdownToHTML(article.content);
         document.getElementById('article-body').innerHTML = contentWithFormatting;
         
-        // Transición: Ocultar Blog y mostrar Artículo (Mutuamente excluyente)
         blogContent.classList.remove('show-content');
         blogContent.classList.add('hidden-content'); 
 
@@ -445,9 +450,7 @@ document.addEventListener('DOMContentLoaded', () => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
-    // Botón de regresar del artículo
     backToBlogButton.addEventListener('click', () => {
-        // Transición: Ocultar Artículo y mostrar Blog (Mutuamente excluyente)
         articleView.classList.remove('show-content');
         articleView.classList.add('hidden-content');
 
@@ -457,11 +460,10 @@ document.addEventListener('DOMContentLoaded', () => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     });
     
-    // Cargar los artículos al inicio
     loadBlogArticles(); 
 
     // ===================================================
-    // 4. LÓGICA DE SUGERENCIAS (Requiere Login) - MODIFICADO
+    // 4. LÓGICA DE SUGERENCIAS (Requiere Login)
     // ===================================================
 
     const suggestionForm = document.getElementById('suggestionForm');
@@ -485,12 +487,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const userName = localStorage.getItem('userName');
         const suggestionText = suggestionInput.value.trim();
         
-        // Deshabilitar el botón mientras se envía
         suggestionButton.disabled = true;
         suggestionButton.textContent = 'Enviando...';
         
         try {
-            // IMPORTANTE: Cambia esta URL por tu URL de Railway
             const response = await fetch('https://darkbots-production.up.railway.app/sugerencia', {
                 method: 'POST',
                 headers: {
@@ -505,7 +505,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const data = await response.json();
             
             if (data.status === 'success') {
-                // Mostrar notificación de éxito
                 showToast(
                     '✅ Sugerencia enviada',
                     `¡Gracias, ${userName || 'Usuario'}! La revisaremos pronto.`,
@@ -513,7 +512,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 );
                 suggestionInput.value = ''; 
             } else {
-                // Mostrar notificación de error
                 showToast(
                     '❌ Error al enviar',
                     data.message || 'No se pudo enviar la sugerencia.',
@@ -529,13 +527,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 'suggestion-error'
             );
         } finally {
-            // Rehabilitar el botón
             suggestionButton.disabled = false;
             suggestionButton.textContent = 'Solicitar Artículo';
         }
     });
     
-    // Función para actualizar el estado del formulario de sugerencias
     const updateSuggestionFormState = (isLoggedIn) => {
         if (isLoggedIn) {
             suggestionInput.disabled = false;
@@ -562,50 +558,43 @@ document.addEventListener('DOMContentLoaded', () => {
     const settingsButton = document.getElementById('settingsButton');
     const savedArticlesButton = document.getElementById('savedArticlesButton');
 
-    // Muestra/Oculta el menú desplegable del perfil
     userProfileContainer.addEventListener('click', (e) => {
         e.stopPropagation(); 
         dropdownMenu.classList.toggle('hidden');
     });
 
-    // Cierra el menú cuando se hace clic fuera
     document.addEventListener('click', (e) => {
         if (!userProfileContainer.contains(e.target) && !dropdownMenu.contains(e.target)) {
             dropdownMenu.classList.add('hidden');
         }
     });
 
-    // Lógica para cerrar sesión (Google y Local Storage)
     signOutButton.addEventListener('click', () => {
         if (typeof google !== 'undefined' && google.accounts.id) {
             google.accounts.id.disableAutoSelect(); 
         }
 
-        // Nota: NO borramos savedArticles al cerrar sesión, se mantienen por usuario
         localStorage.removeItem('userName');
         localStorage.removeItem('userEmail');
         localStorage.removeItem('userPicture');
-        localStorage.removeItem('userLoadTime'); // Limpiar configuración
+        localStorage.removeItem('userLoadTime');
 
         updateAuthUI(false);
     });
     
-    // Abrir modal de configuración
     settingsButton.addEventListener('click', () => {
         openSettingsModal();
-        dropdownMenu.classList.add('hidden'); // Cerrar dropdown
+        dropdownMenu.classList.add('hidden');
     });
     
-    // Abrir sección de artículos guardados
     savedArticlesButton.addEventListener('click', () => {
         showSection('saved-articles-content');
         loadSavedArticles();
-        dropdownMenu.classList.add('hidden'); // Cerrar dropdown
+        dropdownMenu.classList.add('hidden');
         closeSidebarPanel();
     });
 
 
-    // Función global llamada por el SDK de Google
     window.handleCredentialResponse = (response) => {
         if (response.credential) {
             const token = response.credential;
@@ -619,7 +608,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    // Función para actualizar la Interfaz de Usuario de Autenticación
     const updateAuthUI = (isLoggedIn, name = '', picture = '') => {
         if (isLoggedIn) {
             googleSignInButton.style.display = 'none';
@@ -640,7 +628,6 @@ document.addEventListener('DOMContentLoaded', () => {
         updateSuggestionFormState(isLoggedIn);
     };
 
-    // Verificar el estado de la sesión al cargar la página
     const checkUserSession = () => {
         const userName = localStorage.getItem('userName');
         const userPicture = localStorage.getItem('userPicture');
@@ -664,7 +651,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const acceptTermsFinalButton = document.getElementById('acceptTermsFinal');
     const termsScrollArea = document.querySelector('.terms-scroll-area');
 
-    // 6.1. Funciones de Cookies
     const setCookiePreference = (status) => {
         localStorage.setItem('cookiesAccepted', status);
         cookieBanner.classList.add('hidden-cookie');
@@ -679,7 +665,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    // 6.2. Funciones del Modal
     const openModal = () => {
         termsModal.classList.remove('hidden-modal');
         termsScrollArea.scrollTop = 0;
@@ -691,12 +676,10 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const checkScroll = () => {
-        // Habilita el botón solo cuando se ha llegado al final del scroll
         const isScrolledToBottom = termsScrollArea.scrollTop + termsScrollArea.clientHeight >= termsScrollArea.scrollHeight - 20; 
         acceptTermsFinalButton.disabled = !isScrolledToBottom;
     };
 
-    // 6.3. Eventos de Cookies y Modal
     acceptCookiesButton.addEventListener('click', () => {
         setCookiePreference('true');
     });
@@ -731,7 +714,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const openSettingsModal = () => {
         settingsModal.classList.remove('hidden-modal');
         
-        // Cargar el valor guardado
         const savedTime = localStorage.getItem('userLoadTime') || '3';
         loadTimeSlider.value = savedTime;
         loadTimeValue.textContent = savedTime;
@@ -741,17 +723,14 @@ document.addEventListener('DOMContentLoaded', () => {
         settingsModal.classList.add('hidden-modal');
     };
     
-    // Actualizar valor mostrado al mover el slider
     loadTimeSlider.addEventListener('input', (e) => {
         loadTimeValue.textContent = e.target.value;
     });
     
-    // Guardar configuración
     saveSettings.addEventListener('click', () => {
         const selectedTime = loadTimeSlider.value;
         localStorage.setItem('userLoadTime', selectedTime);
         
-        // Mostrar mensaje de éxito
         const originalText = saveSettings.innerHTML;
         saveSettings.innerHTML = '<i class="fas fa-check"></i> ¡Guardado!';
         saveSettings.style.backgroundColor = '#2ecc71';
