@@ -750,8 +750,32 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
     
+    
     // ===================================================
-    // 8. INICIALIZACIÓN
+    // 9. LÓGICA DE GUÍAS EXPANDIBLES
+    // ===================================================
+    
+    const guideCards = document.querySelectorAll('.guide-card');
+    
+    guideCards.forEach(card => {
+        const header = card.querySelector('.guide-header');
+        const toggle = card.querySelector('.guide-toggle');
+        
+        header.addEventListener('click', () => {
+            // Cerrar otras guías abiertas
+            guideCards.forEach(otherCard => {
+                if (otherCard !== card && otherCard.classList.contains('active')) {
+                    otherCard.classList.remove('active');
+                }
+            });
+            
+            // Toggle la guía actual
+            card.classList.toggle('active');
+        });
+    });
+    
+    // ===================================================
+    // 10. INICIALIZACIÓN
     // ===================================================
     
     checkCookiePreference();
