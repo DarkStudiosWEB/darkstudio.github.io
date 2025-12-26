@@ -536,32 +536,482 @@ body {
     margin-top: 15px;
 }
 
-/* -------------------------------------------------------------------- */
-/* NUEVOS ESTILOS PARA GUÍA Y EVENTOS (EJEMPLOS) */
-/* -------------------------------------------------------------------- */
+/* ==================================================================== */
+/* === ESTILOS DE LA SECCIÓN DE GUÍAS (NUEVO DISEÑO) === */
+/* ==================================================================== */
 
-.guide-steps {
-    display: flex;
-    gap: 20px;
-    flex-wrap: wrap;
-    justify-content: center;
-    margin-bottom: 50px;
+.guides-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
 }
 
-.step-card {
-    background-color: #1a1a1a;
-    border: 1px solid #333;
-    border-radius: 8px;
-    padding: 20px;
-    max-width: 350px;
+/* Tarjeta de Guía */
+.guide-card {
+    background: linear-gradient(135deg, #1a1a1a 0%, #0d0d0d 100%);
+    border: 2px solid #333;
+    border-radius: 12px;
+    margin-bottom: 25px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.guide-card:hover {
+    border-color: #555;
+    box-shadow: 0 8px 25px rgba(255, 255, 255, 0.05);
+}
+
+/* Header de la Guía */
+.guide-header {
+    display: flex;
+    align-items: center;
+    padding: 25px;
+    cursor: pointer;
+    gap: 20px;
+    transition: background-color 0.3s ease;
+}
+
+.guide-header:hover {
+    background-color: rgba(255, 255, 255, 0.02);
+}
+
+.guide-icon {
+    width: 70px;
+    height: 70px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2em;
+    color: #FFF;
+    flex-shrink: 0;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+}
+
+.guide-icon.social-icon {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    box-shadow: 0 4px 15px rgba(245, 87, 108, 0.4);
+}
+
+.guide-info {
+    flex-grow: 1;
     text-align: left;
 }
 
-.step-card h3 {
+.guide-title {
+    font-size: 1.8em;
     color: #FFF;
-    font-size: 1.3em;
-    border-bottom: 1px solid #555;
+    margin: 0 0 8px 0;
+    font-weight: bold;
+}
+
+.guide-summary {
+    color: #AAA;
+    margin: 0;
+    font-size: 1em;
+    line-height: 1.5;
+}
+
+.guide-toggle {
+    width: 45px;
+    height: 45px;
+    background-color: #222;
+    border: 2px solid #444;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+}
+
+.guide-toggle i {
+    color: #AAA;
+    font-size: 1.2em;
+    transition: transform 0.3s ease;
+}
+
+.guide-toggle:hover {
+    background-color: #333;
+    border-color: #666;
+}
+
+.guide-card.active .guide-toggle {
+    background-color: #667eea;
+    border-color: #667eea;
+}
+
+.guide-card.active .guide-toggle i {
+    color: #FFF;
+    transform: rotate(180deg);
+}
+
+/* Contenido de la Guía */
+.guide-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s ease, padding 0.5s ease;
+    background-color: rgba(0, 0, 0, 0.3);
+}
+
+.guide-card.active .guide-content {
+    max-height: 5000px;
+    padding: 30px;
+    border-top: 2px solid #333;
+}
+
+.guide-section {
+    margin-bottom: 35px;
+    text-align: left;
+}
+
+.guide-section:last-child {
+    margin-bottom: 0;
+}
+
+.guide-section h4 {
+    color: #FFF;
+    font-size: 1.4em;
+    margin-bottom: 15px;
     padding-bottom: 10px;
+    border-bottom: 2px solid #444;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.guide-section h4 i {
+    color: #667eea;
+}
+
+.guide-section p {
+    color: #CCC;
+    line-height: 1.7;
+    margin-bottom: 15px;
+}
+
+.discord-link {
+    color: #5865F2;
+    font-weight: bold;
+    text-decoration: none;
+    padding: 2px 8px;
+    background-color: rgba(88, 101, 242, 0.1);
+    border-radius: 4px;
+    transition: all 0.3s ease;
+}
+
+.discord-link:hover {
+    background-color: rgba(88, 101, 242, 0.2);
+    color: #7289DA;
+}
+
+/* Listas en Guías */
+.guide-list {
+    list-style: none;
+    padding-left: 0;
+}
+
+.guide-list li {
+    color: #CCC;
+    padding: 12px 0;
+    padding-left: 30px;
+    position: relative;
+    line-height: 1.6;
+    border-bottom: 1px solid #222;
+}
+
+.guide-list li:last-child {
+    border-bottom: none;
+}
+
+.guide-list li::before {
+    content: "▸";
+    position: absolute;
+    left: 0;
+    color: #667eea;
+    font-size: 1.2em;
+}
+
+.guide-list li strong {
+    color: #FFF;
+}
+
+.guide-steps-list {
+    list-style: none;
+    counter-reset: step-counter;
+    padding-left: 0;
+}
+
+.guide-steps-list li {
+    color: #CCC;
+    padding: 15px 20px;
+    padding-left: 60px;
+    position: relative;
+    line-height: 1.6;
+    margin-bottom: 15px;
+    background-color: rgba(255, 255, 255, 0.02);
+    border-radius: 8px;
+    border-left: 3px solid #667eea;
+}
+
+.guide-steps-list li::before {
+    counter-increment: step-counter;
+    content: counter(step-counter);
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 30px;
+    height: 30px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #FFF;
+    font-weight: bold;
+    font-size: 0.9em;
+}
+
+.guide-steps-list li strong {
+    color: #FFF;
+}
+
+/* Grid de Canales */
+.channel-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.channel-item {
+    background-color: rgba(255, 255, 255, 0.02);
+    border: 1px solid #333;
+    border-radius: 8px;
+    padding: 20px;
+    transition: all 0.3s ease;
+}
+
+.channel-item:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+    border-color: #555;
+    transform: translateY(-3px);
+}
+
+.channel-name {
+    color: #FFF;
+    font-weight: bold;
+    font-size: 1.1em;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.channel-name i {
+    color: #667eea;
+}
+
+.channel-item p {
+    color: #AAA;
+    font-size: 0.95em;
+    margin: 0;
+    line-height: 1.5;
+}
+
+/* Redes Sociales */
+.social-networks {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 25px;
+    margin-top: 25px;
+}
+
+.social-card {
+    background: linear-gradient(135deg, #1a1a1a 0%, #0d0d0d 100%);
+    border: 2px solid #333;
+    border-radius: 12px;
+    padding: 25px;
+    transition: all 0.3s ease;
+}
+
+.social-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.twitter-card {
+    border-color: #1DA1F2;
+}
+
+.twitter-card:hover {
+    box-shadow: 0 10px 30px rgba(29, 161, 242, 0.3);
+}
+
+.discord-card {
+    border-color: #5865F2;
+}
+
+.discord-card:hover {
+    box-shadow: 0 10px 30px rgba(88, 101, 242, 0.3);
+}
+
+.social-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #333;
+}
+
+.social-header i {
+    font-size: 2.5em;
+}
+
+.twitter-card .social-header i {
+    color: #1DA1F2;
+}
+
+.discord-card .social-header i {
+    color: #5865F2;
+}
+
+.social-header h5 {
+    font-size: 1.5em;
+    color: #FFF;
+    margin: 0;
+}
+
+.social-description {
+    color: #AAA;
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+.social-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 25px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    margin-bottom: 20px;
+}
+
+.twitter-button {
+    background-color: #1DA1F2;
+    color: #FFF;
+}
+
+.twitter-button:hover {
+    background-color: #1a8cd8;
+    transform: translateX(5px);
+}
+
+.discord-button {
+    background-color: #5865F2;
+    color: #FFF;
+}
+
+.discord-button:hover {
+    background-color: #4752c4;
+    transform: translateX(5px);
+}
+
+.social-content-info {
+    background-color: rgba(255, 255, 255, 0.03);
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 3px solid;
+}
+
+.twitter-card .social-content-info {
+    border-left-color: #1DA1F2;
+}
+
+.discord-card .social-content-info {
+    border-left-color: #5865F2;
+}
+
+.social-content-info strong {
+    color: #FFF;
+    display: block;
+    margin-bottom: 10px;
+    font-size: 1.05em;
+}
+
+.social-content-info ul {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+}
+
+.social-content-info ul li {
+    color: #CCC;
+    padding: 6px 0;
+    padding-left: 25px;
+    position: relative;
+    font-size: 0.95em;
+}
+
+.social-content-info ul li::before {
+    content: "✓";
+    position: absolute;
+    left: 0;
+    font-weight: bold;
+}
+
+.twitter-card .social-content-info ul li::before {
+    color: #1DA1F2;
+}
+
+.discord-card .social-content-info ul li::before {
+    color: #5865F2;
+}
+
+/* Responsividad para Guías */
+@media (max-width: 768px) {
+    .guide-header {
+        padding: 20px 15px;
+        gap: 15px;
+    }
+    
+    .guide-icon {
+        width: 55px;
+        height: 55px;
+        font-size: 1.6em;
+    }
+    
+    .guide-title {
+        font-size: 1.4em;
+    }
+    
+    .guide-summary {
+        font-size: 0.9em;
+    }
+    
+    .guide-toggle {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .guide-card.active .guide-content {
+        padding: 20px 15px;
+    }
+    
+    .channel-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .social-networks {
+        grid-template-columns: 1fr;
+    }
 }
 
 .event-announcement {
