@@ -975,6 +975,76 @@ body {
     color: #5865F2;
 }
 
+/* Secciones Expandibles de Canales */
+.channel-section-expandable {
+    margin-top: 30px;
+    border: 2px solid #333;
+    border-radius: 10px;
+    overflow: hidden;
+    background-color: rgba(255, 255, 255, 0.02);
+}
+
+.channel-section-toggle {
+    width: 100%;
+    background: linear-gradient(135deg, #1a1a1a 0%, #0d0d0d 100%);
+    border: none;
+    padding: 18px 25px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    cursor: pointer;
+    color: #FFF;
+    font-size: 1.2em;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.channel-section-toggle:hover {
+    background: linear-gradient(135deg, #252525 0%, #1a1a1a 100%);
+}
+
+.channel-section-toggle i:first-child {
+    color: #667eea;
+    font-size: 1.3em;
+}
+
+.channel-section-toggle span {
+    flex-grow: 1;
+    text-align: left;
+}
+
+.channel-section-toggle .toggle-icon {
+    color: #AAA;
+    font-size: 1em;
+    transition: transform 0.3s ease;
+}
+
+.channel-section-expandable.active .channel-section-toggle .toggle-icon {
+    transform: rotate(180deg);
+}
+
+.channel-section-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s ease, padding 0.5s ease;
+    background-color: rgba(0, 0, 0, 0.3);
+}
+
+.channel-section-expandable.active .channel-section-content {
+    max-height: 3000px;
+    padding: 25px;
+}
+
+.channel-section-description {
+    color: #AAA;
+    font-size: 1em;
+    margin-bottom: 20px;
+    padding: 15px;
+    background-color: rgba(102, 126, 234, 0.1);
+    border-left: 3px solid #667eea;
+    border-radius: 4px;
+}
+
 /* Responsividad para Guías */
 @media (max-width: 768px) {
     .guide-header {
