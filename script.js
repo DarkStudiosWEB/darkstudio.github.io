@@ -774,6 +774,16 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
     
+    // Lógica para secciones expandibles de canales
+    const channelSectionToggles = document.querySelectorAll('.channel-section-toggle');
+    
+    channelSectionToggles.forEach(toggle => {
+        toggle.addEventListener('click', () => {
+            const section = toggle.parentElement;
+            section.classList.toggle('active');
+        });
+    });
+    
     // ===================================================
     // 10. INICIALIZACIÓN
     // ===================================================
