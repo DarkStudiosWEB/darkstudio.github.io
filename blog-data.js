@@ -54,31 +54,6 @@ const articles = [
         `
     },
     {
-        id: 'prueba',
-        icon: '🗓️',
-        title: 'Prueba-añadir',
-        subtitle: 'Descubre las modalidades de juego que ofrecemos y nuestros proyectos destacados.',
-        isPinned: false,
-        description: 'En Dark Studios, la variedad es clave. Creamos eventos innovadores para Minecraft Java, enfocados en experiencias inmersivas, destacando actualmente nuestro proyecto principal: Dark Games...',
-        content: `
-            <h2>¿Qué Tipos de Eventos Ofrecemos como Dark Studios?</h2>
-            <p>Nuestra programación semanal está diseñada para mantener a nuestra comunidad siempre activa y comprometida. Los eventos en Dark Studios se centran en ofrecer experiencias divertidas y altamente pulidas con la creación de **Eventos Varios**, exclusivas para Minecraft Java.</p>
-            
-            <h2>Proyectos Principales y Enfoque</h2>
-            <p>Nuestro proyecto principal actual es **Dark Games**, una recreación altamente innovadora del concepto *Squid Game* dentro de Minecraft. Este proyecto no solo incluye los minijuegos clásicos, sino también mecánicas innovadoras y personalizadas. Además, la comunidad disfruta de juegos temáticos de la serie *SquidCraftGame* (SCG3 o SCG4), que aportan variedad y frescura.</p>
-            
-            <h2>Variedad Semanal</h2>
-            <p>Complementamos esto con una rotación de eventos semanales que pueden incluir:</p>
-            <ul>
-                <li>Eventos de **Aventura** Inmersivos.</li>
-                <li>Batallas de **Creación** y Retos de Construcción.</li>
-                <li>Retos de **Supervivencia** Únicos.</li>
-                <li>Diversion y Variedad de **Minijuegos** Entretenidos.</li>
-                <li>Repetición de eventos comprados que han sido optimizados por nuestro equipo o de eventos propios.</li>
-            </ul>
-        `
-    },
-    {
         id: 'support-channels',
         icon: '📞',
         title: 'Soporte Directo: Nuestros Canales de Atención al Usuario',
