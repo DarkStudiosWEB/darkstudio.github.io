@@ -121,17 +121,79 @@ document.addEventListener('DOMContentLoaded', () => {
             const adminBadge = document.getElementById('adminBadge');
             if (adminBadge) {
                 adminBadge.classList.remove('hidden');
+                
+                // Configurar el toggle según el estado actual
+                updateMaintenanceToggle();
             }
             
             // Mostrar toast informativo
             setTimeout(() => {
                 showToast(
                     '👑 Modo Admin Activado',
-                    'Tienes acceso completo. Para activar mantenimiento: añade ?maintenance=on a la URL',
+                    'Haz clic en el badge ADMIN para controlar el mantenimiento',
                     'info'
                 );
             }, 1500);
         }, 1000);
+    }
+    
+    // ===================================================
+    // 0.1. CONTROL DE MANTENIMIENTO (SOLO ADMIN)
+    // ===================================================
+    
+    const adminBadge = document.getElementById('adminBadge');
+    const adminMenu = document.getElementById('adminMenu');
+    const maintenanceToggle = document.getElementById('maintenanceToggle');
+    const maintenanceStatus = document.getElementById('maintenanceStatus');
+    
+    // Función para actualizar el toggle según el estado
+    const updateMaintenanceToggle = () => {
+        const currentStatus = localStorage.getItem('maintenanceMode') === 'true';
+        if (maintenanceToggle) {
+            maintenanceToggle.checked = currentStatus;
+        }
+        if (maintenanceStatus) {
+            maintenanceStatus.textContent = currentStatus ? 'Activado' : 'Desactivado';
+            maintenanceStatus.style.color = currentStatus ? '#e74c3c' : '#2ecc71';
+        }
+    };
+    
+    // Toggle del menú admin
+    if (adminBadge && isAdminMode) {
+        adminBadge.addEventListener('click', (e) => {
+            e.stopPropagation();
+            adminMenu.classList.toggle('hidden');
+        });
+        
+        // Cerrar menú al hacer clic fuera
+        document.addEventListener('click', (e) => {
+            if (adminMenu && !adminMenu.contains(e.target) && !adminBadge.contains(e.target)) {
+                adminMenu.classList.add('hidden');
+            }
+        });
+    }
+    
+    // Control del toggle de mantenimiento
+    if (maintenanceToggle && isAdminMode) {
+        maintenanceToggle.addEventListener('change', (e) => {
+            const isActive = e.target.checked;
+            
+            // Guardar en localStorage
+            localStorage.setItem('maintenanceMode', isActive ? 'true' : 'false');
+            
+            // Actualizar UI
+            maintenanceStatus.textContent = isActive ? 'Activado' : 'Desactivado';
+            maintenanceStatus.style.color = isActive ? '#e74c3c' : '#2ecc71';
+            
+            // Mostrar confirmación
+            showToast(
+                isActive ? '🔧 Mantenimiento Activado' : '✅ Mantenimiento Desactivado',
+                isActive ? 'Los usuarios verán la pantalla de mantenimiento' : 'Los usuarios pueden acceder normalmente',
+                isActive ? 'info' : 'suggestion-success'
+            );
+            
+            console.log(isActive ? '🔧 MANTENIMIENTO ACTIVADO' : '✅ MANTENIMIENTO DESACTIVADO');
+        });
     }
 
 
