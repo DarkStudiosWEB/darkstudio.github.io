@@ -626,6 +626,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         
         updateSuggestionFormState(isLoggedIn);
+        updateDarkflashButton(); // Actualizar DarkFlash cuando cambie el login
     };
 
     const checkUserSession = () => {
@@ -752,7 +753,389 @@ document.addEventListener('DOMContentLoaded', () => {
     
     
     // ===================================================
-    // 9. LÓGICA DE GUÍAS EXPANDIBLES
+    // 9. DARKFLASH ASSISTANT
+    // ===================================================
+    
+    const darkflashButton = document.getElementById('darkflashButton');
+    const darkflashPanel = document.getElementById('darkflashPanel');
+    const closeDarkflash = document.getElementById('closeDarkflash');
+    
+    // Secciones
+    const darkflashMenu = document.getElementById('darkflashMenu');
+    const darkflashGame = document.getElementById('darkflashGame');
+    const darkflashFAQ = document.getElementById('darkflashFAQ');
+    const darkflashSupport = document.getElementById('darkflashSupport');
+    const darkflashRating = document.getElementById('darkflashRating');
+    
+    // Estado del asistente
+    let darkflashActive = false;
+    let currentSection = 'menu';
+    let supportSessionId = null;
+    let selectedRating = 0;
+    
+    // Verificar estado de login
+    const updateDarkflashButton = () => {
+        const isLoggedIn = localStorage.getItem('userEmail') !== null;
+        if (isLoggedIn) {
+            darkflashButton.classList.remove('disabled');
+        } else {
+            darkflashButton.classList.add('disabled');
+        }
+    };
+    
+    // Click en botón principal
+    darkflashButton.addEventListener('click', () => {
+        const isLoggedIn = localStorage.getItem('userEmail') !== null;
+        
+        if (!isLoggedIn) {
+            showToast(
+                '🔒 Inicio de sesión requerido',
+                'Debes iniciar sesión con Google para usar DarkFlash.',
+                'info'
+            );
+            return;
+        }
+        
+        darkflashActive = !darkflashActive;
+        if (darkflashActive) {
+            darkflashPanel.classList.remove('hidden');
+            showDarkflashSection('menu');
+        } else {
+            darkflashPanel.classList.add('hidden');
+        }
+    });
+    
+    closeDarkflash.addEventListener('click', () => {
+        darkflashPanel.classList.add('hidden');
+        darkflashActive = false;
+    });
+    
+    // Función para cambiar secciones
+    const showDarkflashSection = (section) => {
+        // Ocultar todas
+        [darkflashMenu, darkflashGame, darkflashFAQ, darkflashSupport, darkflashRating].forEach(sec => {
+            sec.classList.add('hidden');
+        });
+        
+        // Mostrar la seleccionada
+        switch(section) {
+            case 'menu':
+                darkflashMenu.classList.remove('hidden');
+                break;
+            case 'game':
+                darkflashGame.classList.remove('hidden');
+                initGame();
+                break;
+            case 'faq':
+                darkflashFAQ.classList.remove('hidden');
+                break;
+            case 'support':
+                darkflashSupport.classList.remove('hidden');
+                initSupport();
+                break;
+            case 'rating':
+                darkflashRating.classList.remove('hidden');
+                break;
+        }
+        
+        currentSection = section;
+    };
+    
+    // Opciones del menú principal
+    document.querySelectorAll('.darkflash-option').forEach(option => {
+        option.addEventListener('click', (e) => {
+            const selected = e.currentTarget.dataset.option;
+            showDarkflashSection(selected);
+        });
+    });
+    
+    // Botones de volver
+    document.querySelectorAll('.darkflash-back').forEach(btn => {
+        btn.addEventListener('click', () => {
+            showDarkflashSection('menu');
+        });
+    });
+    
+    // ===================================================
+    // MINIJUEGO: BRICK BREAKER
+    // ===================================================
+    
+    let gameCanvas, gameCtx, gameRunning, gameScore;
+    let paddle, ball, bricks;
+    
+    const initGame = () => {
+        gameCanvas = document.getElementById('gameCanvas');
+        gameCtx = gameCanvas.getContext('2d');
+        gameScore = 0;
+        gameRunning = false;
+        
+        // Reset elementos del juego
+        paddle = { x: 125, y: 370, width: 50, height: 10, speed: 7 };
+        ball = { x: 150, y: 350, radius: 5, dx: 3, dy: -3 };
+        bricks = [];
+        
+        // Crear bricks
+        for (let row = 0; row < 5; row++) {
+            for (let col = 0; col < 6; col++) {
+                bricks.push({
+                    x: col * 48 + 6,
+                    y: row * 20 + 30,
+                    width: 42,
+                    height: 15,
+                    status: 1
+                });
+            }
+        }
+        
+        drawGame();
+    };
+    
+    const drawGame = () => {
+        if (!gameCtx) return;
+        
+        // Limpiar canvas
+        gameCtx.fillStyle = '#000';
+        gameCtx.fillRect(0, 0, 300, 400);
+        
+        // Dibujar paddle
+        gameCtx.fillStyle = '#667eea';
+        gameCtx.fillRect(paddle.x, paddle.y, paddle.width, paddle.height);
+        
+        // Dibujar ball
+        gameCtx.fillStyle = '#fff';
+        gameCtx.beginPath();
+        gameCtx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
+        gameCtx.fill();
+        
+        // Dibujar bricks
+        bricks.forEach(brick => {
+            if (brick.status === 1) {
+                gameCtx.fillStyle = '#f39c12';
+                gameCtx.fillRect(brick.x, brick.y, brick.width, brick.height);
+            }
+        });
+    };
+    
+    const updateGame = () => {
+        if (!gameRunning) return;
+        
+        // Mover ball
+        ball.x += ball.dx;
+        ball.y += ball.dy;
+        
+        // Colisión con paredes
+        if (ball.x + ball.radius > 300 || ball.x - ball.radius < 0) {
+            ball.dx = -ball.dx;
+        }
+        if (ball.y - ball.radius < 0) {
+            ball.dy = -ball.dy;
+        }
+        
+        // Colisión con paddle
+        if (ball.y + ball.radius > paddle.y && ball.x > paddle.x && ball.x < paddle.x + paddle.width) {
+            ball.dy = -ball.dy;
+        }
+        
+        // Colisión con bricks
+        bricks.forEach(brick => {
+            if (brick.status === 1) {
+                if (ball.x > brick.x && ball.x < brick.x + brick.width &&
+                    ball.y > brick.y && ball.y < brick.y + brick.height) {
+                    ball.dy = -ball.dy;
+                    brick.status = 0;
+                    gameScore += 10;
+                    document.getElementById('gameScore').textContent = gameScore;
+                }
+            }
+        });
+        
+        // Game over
+        if (ball.y + ball.radius > 400) {
+            gameRunning = false;
+            alert(`¡Juego terminado! Puntuación: ${gameScore}`);
+            initGame();
+        }
+        
+        // Victoria
+        if (bricks.every(brick => brick.status === 0)) {
+            gameRunning = false;
+            alert(`¡Ganaste! Puntuación final: ${gameScore}`);
+            initGame();
+        }
+        
+        drawGame();
+        if (gameRunning) {
+            requestAnimationFrame(updateGame);
+        }
+    };
+    
+    // Control del paddle
+    let paddleLeft = false, paddleRight = false;
+    
+    document.addEventListener('keydown', (e) => {
+        if (!gameRunning) return;
+        if (e.key === 'ArrowLeft') paddleLeft = true;
+        if (e.key === 'ArrowRight') paddleRight = true;
+    });
+    
+    document.addEventListener('keyup', (e) => {
+        if (e.key === 'ArrowLeft') paddleLeft = false;
+        if (e.key === 'ArrowRight') paddleRight = false;
+    });
+    
+    setInterval(() => {
+        if (!gameRunning) return;
+        if (paddleLeft && paddle.x > 0) paddle.x -= paddle.speed;
+        if (paddleRight && paddle.x < 300 - paddle.width) paddle.x += paddle.speed;
+    }, 1000 / 60);
+    
+    document.getElementById('gameStart').addEventListener('click', () => {
+        if (gameRunning) return;
+        gameRunning = true;
+        document.getElementById('gameScore').textContent = '0';
+        updateGame();
+    });
+    
+    // ===================================================
+    // FAQ BOT
+    // ===================================================
+    
+    const faqData = {
+        discord: {
+            title: 'Discord',
+            content: 'Únete a nuestro servidor de Discord para conectar con la comunidad. Encontrarás canales de anuncios, eventos, soporte y más. ¡No olvides activar todos los canales desde "Explorar Canales"!'
+        },
+        events: {
+            title: 'Eventos',
+            content: 'Dark Studio organiza eventos semanales como torneos, minijuegos y construcciones colaborativas. Mantente atento al canal #anuncios en Discord y a esta web para no perderte ninguno.'
+        },
+        rules: {
+            title: 'Reglas',
+            content: 'Respeta a todos los miembros, evita el spam, mantén contenido apropiado, usa los canales correctos, respeta la privacidad de otros y sigue las indicaciones del staff. El incumplimiento puede resultar en sanciones.'
+        },
+        launcher: {
+            title: 'Dark Launcher',
+            content: 'Descarga nuestro launcher oficial desde el canal #dark-launcher en Discord. Incluye todas las texturas, mods y configuraciones necesarias para jugar en nuestros eventos. Instalación sencilla y actualizaciones automáticas.'
+        }
+    };
+    
+    document.querySelectorAll('.faq-topic').forEach(topic => {
+        topic.addEventListener('click', (e) => {
+            const selected = e.currentTarget.dataset.topic;
+            const data = faqData[selected];
+            const response = document.getElementById('faqResponse');
+            
+            response.innerHTML = `
+                <h4 style="color: #667eea; margin-top: 0;">${data.title}</h4>
+                <p style="margin: 0;">${data.content}</p>
+            `;
+            response.classList.add('show');
+        });
+    });
+    
+    // ===================================================
+    // SOPORTE EN VIVO
+    // ===================================================
+    
+    const initSupport = () => {
+        const userEmail = localStorage.getItem('userEmail');
+        supportSessionId = Date.now() + '_' + userEmail;
+        
+        const messagesDiv = document.getElementById('supportMessages');
+        messagesDiv.innerHTML = '<div class="support-message system">Conectando con el equipo de soporte...</div>';
+        
+        document.getElementById('supportStatusText').textContent = 'Esperando conexión...';
+        document.getElementById('supportInput').disabled = false;
+        document.getElementById('supportSend').disabled = false;
+        document.getElementById('supportEnd').classList.remove('hidden');
+        
+        // Simular mensaje de bienvenida
+        setTimeout(() => {
+            addSupportMessage('system', '¡Hola! Un miembro del equipo estará contigo pronto. ¿En qué podemos ayudarte?');
+            document.getElementById('supportStatusText').textContent = 'En espera';
+            document.querySelector('.support-status').classList.add('waiting');
+        }, 1500);
+    };
+    
+    const addSupportMessage = (type, text) => {
+        const messagesDiv = document.getElementById('supportMessages');
+        const messageEl = document.createElement('div');
+        messageEl.className = `support-message ${type}`;
+        messageEl.textContent = text;
+        messagesDiv.appendChild(messageEl);
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    };
+    
+    document.getElementById('supportSend').addEventListener('click', () => {
+        const input = document.getElementById('supportInput');
+        const message = input.value.trim();
+        
+        if (message) {
+            addSupportMessage('user', message);
+            input.value = '';
+            
+            // Aquí se enviaría al servidor real
+            // Por ahora simulamos respuesta automática
+            setTimeout(() => {
+                addSupportMessage('system', 'Tu mensaje ha sido enviado. El equipo responderá pronto.');
+            }, 500);
+        }
+    });
+    
+    document.getElementById('supportInput').addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            document.getElementById('supportSend').click();
+        }
+    });
+    
+    document.getElementById('supportEnd').addEventListener('click', () => {
+        showDarkflashSection('rating');
+    });
+    
+    // ===================================================
+    // CALIFICACIÓN
+    // ===================================================
+    
+    document.querySelectorAll('.rating-stars i').forEach(star => {
+        star.addEventListener('click', (e) => {
+            selectedRating = parseInt(e.target.dataset.rating);
+            
+            document.querySelectorAll('.rating-stars i').forEach((s, idx) => {
+                if (idx < selectedRating) {
+                    s.classList.add('active');
+                } else {
+                    s.classList.remove('active');
+                }
+            });
+            
+            document.getElementById('ratingSubmit').disabled = false;
+        });
+    });
+    
+    document.getElementById('ratingSubmit').addEventListener('click', () => {
+        const comment = document.getElementById('ratingComment').value.trim();
+        
+        // Aquí se enviaría al servidor
+        console.log('Rating:', selectedRating, 'Comment:', comment);
+        
+        showToast(
+            '✅ Gracias por tu feedback',
+            'Tu calificación ha sido registrada.',
+            'suggestion-success'
+        );
+        
+        showDarkflashSection('menu');
+        selectedRating = 0;
+        document.getElementById('ratingComment').value = '';
+        document.querySelectorAll('.rating-stars i').forEach(s => s.classList.remove('active'));
+    });
+    
+    document.getElementById('ratingSkip').addEventListener('click', () => {
+        showDarkflashSection('menu');
+    });
+    
+    // ===================================================
+    // 10. LÓGICA DE GUÍAS EXPANDIBLES
     // ===================================================
     
     const guideCards = document.querySelectorAll('.guide-card');
@@ -785,9 +1168,10 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     
     // ===================================================
-    // 10. INICIALIZACIÓN
+    // 11. INICIALIZACIÓN
     // ===================================================
     
     checkCookiePreference();
-    checkUserSession(); 
+    checkUserSession();
+    updateDarkflashButton(); // Inicializar DarkFlash
 });
