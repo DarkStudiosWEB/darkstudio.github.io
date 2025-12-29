@@ -6,7 +6,7 @@
     <title>Dark Studio</title>
     
     <!-- Favicon -->
-    <link rel="icon" type="image/png" href="logo-server.png">
+    <link rel="icon" type="image/png" href="logo-servern.png">
     
     <script src="https://accounts.google.com/gsi/client" async defer></script>
     
@@ -27,6 +27,28 @@
         </div>
     </div>
 
+    <!-- PANTALLA DE MANTENIMIENTO -->
+    <div id="maintenanceScreen" class="maintenance-screen hidden">
+        <div class="maintenance-content">
+            <i class="fas fa-tools maintenance-icon"></i>
+            <h1>Sitio en Mantenimiento</h1>
+            <p>Estamos trabajando para mejorar tu experiencia.</p>
+            <p class="maintenance-subtitle">Volveremos pronto. Gracias por tu paciencia.</p>
+            
+            <div class="maintenance-discord">
+                <p>Mientras tanto, únete a nuestra comunidad:</p>
+                <a href="https://discord.gg/59Rd7qbWDj" target="_blank" class="maintenance-discord-btn">
+                    <i class="fab fa-discord"></i>
+                    Unirse a Discord
+                </a>
+            </div>
+            
+            <div class="maintenance-footer">
+                <p>&copy; 2025 Dark Studios</p>
+            </div>
+        </div>
+    </div>
+
     <main id="mainContent" class="hidden">
         
         <header class="main-header">
@@ -39,6 +61,11 @@
                      alt="Logo Dark Studio" 
                      class="server-logo" 
                      id="serverLogo">
+                
+                <!-- INDICADOR DE MODO ADMIN -->
+                <div id="adminBadge" class="admin-badge hidden">
+                    <i class="fas fa-crown"></i> ADMIN
+                </div>
             </div>
             
             <div class="header-right">
@@ -401,7 +428,7 @@
                         <div class="guide-content">
                             <div class="guide-section">
                                 <h4><i class="fas fa-globe"></i> Nuestras Plataformas</h4>
-                                <p>Dark Studio está presente en múltiples plataformas para mantenerte conectado con todo lo que sucede en nuestra comunidad.</p>
+                                <p>Dark Studio está presente en las siguientes plataformas para mantenerte conectado con todo lo que sucede en nuestra comunidad.</p>
                             </div>
                             
                             <div class="social-networks">
@@ -412,15 +439,14 @@
                                     </div>
                                     <p class="social-description">Actualizaciones rápidas, noticias del servidor y anuncios importantes.</p>
                                     <a href="https://x.com/darkstudio51719" target="_blank" class="social-button twitter-button">
-                                        <i class="fas fa-external-link-alt"></i> Seguir en X
+                                        <i class="fas fa-external-link-alt"></i> Siguenos en X
                                     </a>
                                     <div class="social-content-info">
                                         <strong>Qué publicamos:</strong>
                                         <ul>
-                                            <li>Anuncios de eventos y torneos</li>
-                                            <li>Actualizaciones del servidor</li>
-                                            <li>Momentos destacados de la comunidad</li>
-                                            <li>Sorteos y concursos exclusivos</li>
+                                            <li>Anuncios de eventos oficiales</li>
+                                            <li>Nuevos participantes</li>
+                                            <li>Contenido extra</li>
                                         </ul>
                                     </div>
                                 </div>
@@ -437,10 +463,10 @@
                                     <div class="social-content-info">
                                         <strong>Qué encontrarás:</strong>
                                         <ul>
-                                            <li>Chat en vivo con la comunidad</li>
+                                            <li>Chat global con la comunidad</li>
                                             <li>Canales de voz para jugar juntos</li>
-                                            <li>Soporte técnico directo</li>
-                                            <li>Eventos exclusivos y actividades</li>
+                                            <li>Soporte directo</li>
+                                            <li>Eventos exclusivos</li>
                                         </ul>
                                     </div>
                                 </div>
@@ -450,8 +476,8 @@
                                 <h4><i class="fas fa-bell"></i> Mantente Informado</h4>
                                 <p>Para no perderte ninguna actualización importante:</p>
                                 <ul class="guide-list">
-                                    <li>Activa las notificaciones en Discord para el canal <strong>#anuncios</strong></li>
-                                    <li>Síguenos en X y activa las notificaciones de nuestros tweets</li>
+                                    <li>Activa las notificaciones de Discord y revisa nuestros canales del servidor de <strong>DarkStudios</strong></li>
+                                    <li>Síguenos en X y mantente informado</li>
                                     <li>Revisa regularmente esta página web para ver nuevos artículos y guías</li>
                                 </ul>
                             </div>
