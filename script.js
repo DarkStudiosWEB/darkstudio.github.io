@@ -16,27 +16,37 @@ document.addEventListener('DOMContentLoaded', () => {
         isAdminMode = true;
         sessionStorage.setItem('adminMode', 'true');
         console.log('🔑 Modo Administrador Activado');
+        
+        // Limpiar URL para no mostrar la clave
+        window.history.replaceState({}, document.title, window.location.pathname);
     } else if (sessionStorage.getItem('adminMode') === 'true') {
         isAdminMode = true;
     }
     
-    // Función para verificar mantenimiento
-    const checkMaintenanceMode = async () => {
-        try {
-            const response = await fetch('config.json');
-            const config = await response.json();
-            isMaintenanceMode = config.maintenance;
-            
-            // Si está en mantenimiento y NO es admin
-            if (isMaintenanceMode && !isAdminMode) {
-                return true;
-            }
-            return false;
-        } catch (error) {
-            // Si no existe el archivo, asumir que NO está en mantenimiento
-            console.log('Config file not found, assuming no maintenance');
-            return false;
+    // Verificar si hay un parámetro especial para activar/desactivar mantenimiento (solo admins)
+    const maintenanceControl = urlParams.get('maintenance');
+    if (isAdminMode && maintenanceControl !== null) {
+        if (maintenanceControl === 'on') {
+            localStorage.setItem('maintenanceMode', 'true');
+            console.log('🔧 Modo Mantenimiento ACTIVADO');
+        } else if (maintenanceControl === 'off') {
+            localStorage.setItem('maintenanceMode', 'false');
+            console.log('✅ Modo Mantenimiento DESACTIVADO');
         }
+        // Limpiar URL
+        window.history.replaceState({}, document.title, window.location.pathname);
+    }
+    
+    // Función para verificar mantenimiento
+    const checkMaintenanceMode = () => {
+        // Leer del localStorage
+        const maintenanceStatus = localStorage.getItem('maintenanceMode');
+        
+        // Si está en mantenimiento y NO es admin
+        if (maintenanceStatus === 'true' && !isAdminMode) {
+            return true;
+        }
+        return false;
     };
     
     // ===================================================
@@ -68,7 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }, INTERVAL_MS);
 
-    const finishLoading = async () => {
+    const finishLoading = () => {
         if (isLoaded) return;
 
         isLoaded = true;
@@ -78,7 +88,7 @@ document.addEventListener('DOMContentLoaded', () => {
         loadingText.textContent = `Carga completa.`;
 
         // Verificar mantenimiento antes de mostrar contenido
-        const inMaintenance = await checkMaintenanceMode();
+        const inMaintenance = checkMaintenanceMode();
 
         setTimeout(() => {
             preloader.classList.add('fade-out');
@@ -89,6 +99,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (inMaintenance) {
                     // Mostrar pantalla de mantenimiento
                     maintenanceScreen.classList.remove('hidden');
+                    console.log('🔧 Mostrando pantalla de mantenimiento');
                 } else {
                     // Mostrar contenido normal
                     mainContent.classList.remove('hidden');
@@ -111,6 +122,15 @@ document.addEventListener('DOMContentLoaded', () => {
             if (adminBadge) {
                 adminBadge.classList.remove('hidden');
             }
+            
+            // Mostrar toast informativo
+            setTimeout(() => {
+                showToast(
+                    '👑 Modo Admin Activado',
+                    'Tienes acceso completo. Para activar mantenimiento: añade ?maintenance=on a la URL',
+                    'info'
+                );
+            }, 1500);
         }, 1000);
     }
 
