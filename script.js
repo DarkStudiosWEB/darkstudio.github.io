@@ -1,6 +1,45 @@
 document.addEventListener('DOMContentLoaded', () => {
     
     // ===================================================
+    // 0. SISTEMA DE MANTENIMIENTO Y ADMIN
+    // ===================================================
+    
+    const maintenanceScreen = document.getElementById('maintenanceScreen');
+    let isMaintenanceMode = false;
+    let isAdminMode = false;
+    
+    // Verificar si es modo admin desde la URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const adminKey = urlParams.get('admin');
+    
+    if (adminKey === 'darkstudio_admin_2025') {
+        isAdminMode = true;
+        sessionStorage.setItem('adminMode', 'true');
+        console.log('🔑 Modo Administrador Activado');
+    } else if (sessionStorage.getItem('adminMode') === 'true') {
+        isAdminMode = true;
+    }
+    
+    // Función para verificar mantenimiento
+    const checkMaintenanceMode = async () => {
+        try {
+            const response = await fetch('config.json');
+            const config = await response.json();
+            isMaintenanceMode = config.maintenance;
+            
+            // Si está en mantenimiento y NO es admin
+            if (isMaintenanceMode && !isAdminMode) {
+                return true;
+            }
+            return false;
+        } catch (error) {
+            // Si no existe el archivo, asumir que NO está en mantenimiento
+            console.log('Config file not found, assuming no maintenance');
+            return false;
+        }
+    };
+    
+    // ===================================================
     // 1. GESTIÓN DEL PRELOADER
     // ===================================================
 
@@ -29,7 +68,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }, INTERVAL_MS);
 
-    const finishLoading = () => {
+    const finishLoading = async () => {
         if (isLoaded) return;
 
         isLoaded = true;
@@ -38,14 +77,23 @@ document.addEventListener('DOMContentLoaded', () => {
         progressBar.style.width = '100%';
         loadingText.textContent = `Carga completa.`;
 
+        // Verificar mantenimiento antes de mostrar contenido
+        const inMaintenance = await checkMaintenanceMode();
+
         setTimeout(() => {
             preloader.classList.add('fade-out');
             
             preloader.addEventListener('transitionend', () => {
                 preloader.classList.add('hidden');
-                mainContent.classList.remove('hidden');
                 
-                showSection('home-content');
+                if (inMaintenance) {
+                    // Mostrar pantalla de mantenimiento
+                    maintenanceScreen.classList.remove('hidden');
+                } else {
+                    // Mostrar contenido normal
+                    mainContent.classList.remove('hidden');
+                    showSection('home-content');
+                }
                 
             }, { once: true });
             
@@ -55,6 +103,16 @@ document.addEventListener('DOMContentLoaded', () => {
     setTimeout(() => {
         finishLoading();
     }, loadTime);
+    
+    // Mostrar badge de admin si está en modo admin
+    if (isAdminMode) {
+        setTimeout(() => {
+            const adminBadge = document.getElementById('adminBadge');
+            if (adminBadge) {
+                adminBadge.classList.remove('hidden');
+            }
+        }, 1000);
+    }
 
 
     // ===================================================
