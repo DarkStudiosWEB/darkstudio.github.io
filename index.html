@@ -6,7 +6,7 @@
     <title>Dark Studio</title>
     
     <!-- Favicon -->
-    <link rel="icon" type="image/png" href="logo-servern.png">
+    <link rel="icon" type="image/png" href="logo-server.png">
     
     <script src="https://accounts.google.com/gsi/client" async defer></script>
     
@@ -412,15 +412,15 @@
                                     </div>
                                     <p class="social-description">Actualizaciones rápidas, noticias del servidor y anuncios importantes.</p>
                                     <a href="https://x.com/darkstudio51719" target="_blank" class="social-button twitter-button">
-                                        <i class="fas fa-external-link-alt"></i> Seguirnos en X
+                                        <i class="fas fa-external-link-alt"></i> Seguir en X
                                     </a>
                                     <div class="social-content-info">
                                         <strong>Qué publicamos:</strong>
                                         <ul>
-                                            <li>Anuncios de eventos</li>
-                                            <li>Actualizaciones</li>
-                                            <li>Nuevos Participantes</li>
-                                            <li>Contenido Extra</li>
+                                            <li>Anuncios de eventos y torneos</li>
+                                            <li>Actualizaciones del servidor</li>
+                                            <li>Momentos destacados de la comunidad</li>
+                                            <li>Sorteos y concursos exclusivos</li>
                                         </ul>
                                     </div>
                                 </div>
@@ -437,7 +437,7 @@
                                     <div class="social-content-info">
                                         <strong>Qué encontrarás:</strong>
                                         <ul>
-                                            <li>Chat global con la comunidad</li>
+                                            <li>Chat en vivo con la comunidad</li>
                                             <li>Canales de voz para jugar juntos</li>
                                             <li>Soporte técnico directo</li>
                                             <li>Eventos exclusivos y actividades</li>
@@ -450,8 +450,8 @@
                                 <h4><i class="fas fa-bell"></i> Mantente Informado</h4>
                                 <p>Para no perderte ninguna actualización importante:</p>
                                 <ul class="guide-list">
-                                    <li>Pendiente a las notificaciones de nuestro canal de <strong>#anuncios</strong></li>
-                                    <li>Síguenos en X y revisa los ultimos eventos y participantes</li>
+                                    <li>Activa las notificaciones en Discord para el canal <strong>#anuncios</strong></li>
+                                    <li>Síguenos en X y activa las notificaciones de nuestros tweets</li>
                                     <li>Revisa regularmente esta página web para ver nuevos artículos y guías</li>
                                 </ul>
                             </div>
@@ -497,6 +497,127 @@
 
         <!-- CONTENEDOR DE NOTIFICACIONES TOAST -->
         <div id="toastContainer" class="toast-container"></div>
+
+        <!-- DARKFLASH ASSISTANT -->
+        <div id="darkflashButton" class="darkflash-button disabled">
+            <i class="fas fa-bolt"></i>
+        </div>
+
+        <div id="darkflashPanel" class="darkflash-panel hidden">
+            <div class="darkflash-header">
+                <div class="darkflash-title">
+                    <i class="fas fa-bolt"></i>
+                    <span>DarkFlash</span>
+                </div>
+                <button id="closeDarkflash" class="darkflash-close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <!-- MENÚ PRINCIPAL -->
+            <div id="darkflashMenu" class="darkflash-content">
+                <p class="darkflash-welcome">¡Hola! Soy DarkFlash, tu asistente virtual. ¿En qué puedo ayudarte?</p>
+                <div class="darkflash-options">
+                    <button class="darkflash-option" data-option="game">
+                        <i class="fas fa-gamepad"></i>
+                        <div>
+                            <strong>Minijuego</strong>
+                            <span>Juega Brick Breaker</span>
+                        </div>
+                    </button>
+                    <button class="darkflash-option" data-option="faq">
+                        <i class="fas fa-question-circle"></i>
+                        <div>
+                            <strong>Preguntas Frecuentes</strong>
+                            <span>Consulta información</span>
+                        </div>
+                    </button>
+                    <button class="darkflash-option" data-option="support">
+                        <i class="fas fa-headset"></i>
+                        <div>
+                            <strong>Soporte en Vivo</strong>
+                            <span>Habla con el equipo</span>
+                        </div>
+                    </button>
+                </div>
+            </div>
+
+            <!-- MINIJUEGO -->
+            <div id="darkflashGame" class="darkflash-content hidden">
+                <button class="darkflash-back">
+                    <i class="fas fa-arrow-left"></i> Volver
+                </button>
+                <div class="game-container">
+                    <div class="game-score">Puntos: <span id="gameScore">0</span></div>
+                    <canvas id="gameCanvas" width="300" height="400"></canvas>
+                    <button id="gameStart" class="game-start-btn">Iniciar Juego</button>
+                </div>
+            </div>
+
+            <!-- FAQ BOT -->
+            <div id="darkflashFAQ" class="darkflash-content hidden">
+                <button class="darkflash-back">
+                    <i class="fas fa-arrow-left"></i> Volver
+                </button>
+                <div class="faq-container">
+                    <p class="faq-intro">Selecciona un tema para obtener información:</p>
+                    <div class="faq-topics">
+                        <button class="faq-topic" data-topic="discord">
+                            <i class="fab fa-discord"></i> Discord
+                        </button>
+                        <button class="faq-topic" data-topic="events">
+                            <i class="fas fa-calendar"></i> Eventos
+                        </button>
+                        <button class="faq-topic" data-topic="rules">
+                            <i class="fas fa-gavel"></i> Reglas
+                        </button>
+                        <button class="faq-topic" data-topic="launcher">
+                            <i class="fas fa-desktop"></i> Launcher
+                        </button>
+                    </div>
+                    <div id="faqResponse" class="faq-response"></div>
+                </div>
+            </div>
+
+            <!-- SOPORTE EN VIVO -->
+            <div id="darkflashSupport" class="darkflash-content hidden">
+                <button class="darkflash-back">
+                    <i class="fas fa-arrow-left"></i> Volver
+                </button>
+                <div class="support-container">
+                    <div id="supportMessages" class="support-messages"></div>
+                    <div class="support-input-area">
+                        <input type="text" id="supportInput" placeholder="Escribe tu mensaje..." disabled>
+                        <button id="supportSend" disabled>
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                    <div class="support-status">
+                        <i class="fas fa-circle"></i>
+                        <span id="supportStatusText">Esperando conexión...</span>
+                    </div>
+                    <button id="supportEnd" class="support-end-btn hidden">Finalizar Chat</button>
+                </div>
+            </div>
+
+            <!-- CALIFICACIÓN -->
+            <div id="darkflashRating" class="darkflash-content hidden">
+                <div class="rating-container">
+                    <h3>¿Cómo fue tu experiencia?</h3>
+                    <p>Califica nuestro servicio de soporte</p>
+                    <div class="rating-stars">
+                        <i class="fas fa-star" data-rating="1"></i>
+                        <i class="fas fa-star" data-rating="2"></i>
+                        <i class="fas fa-star" data-rating="3"></i>
+                        <i class="fas fa-star" data-rating="4"></i>
+                        <i class="fas fa-star" data-rating="5"></i>
+                    </div>
+                    <textarea id="ratingComment" placeholder="Comentario opcional (máx. 200 caracteres)" maxlength="200"></textarea>
+                    <button id="ratingSubmit" class="rating-submit-btn" disabled>Enviar Calificación</button>
+                    <button id="ratingSkip" class="rating-skip-btn">Omitir</button>
+                </div>
+            </div>
+        </div>
 
         <!-- MODAL DE CONFIGURACIÓN -->
         <div id="settingsModal" class="modal hidden-modal">
