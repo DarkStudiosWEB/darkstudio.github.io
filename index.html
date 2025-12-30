@@ -74,6 +74,7 @@
                         <span>Panel de Control</span>
                     </div>
                     <div class="admin-menu-content">
+                        <!-- Control de Mantenimiento -->
                         <div class="admin-option">
                             <div class="admin-option-info">
                                 <strong>Modo Mantenimiento</strong>
@@ -85,6 +86,34 @@
                             </label>
                         </div>
                         <p class="admin-hint">Los usuarios verán una pantalla de mantenimiento cuando esté activo.</p>
+                        
+                        <!-- Panel de Respuesta de Soporte (solo para admins logueados) -->
+                        <div id="adminSupportPanel" class="admin-support-panel hidden">
+                            <hr style="border-color: #333; margin: 20px 0;">
+                            <div class="admin-option-info" style="margin-bottom: 15px;">
+                                <strong>📞 Chats Pendientes</strong>
+                                <span id="pendingChatsCount">0 conversaciones</span>
+                            </div>
+                            <button id="openSupportDashboard" class="admin-action-btn">
+                                <i class="fas fa-headset"></i> Abrir Panel de Soporte
+                            </button>
+                        </div>
+                        
+                        <!-- Gestión de Admins (solo para operador) -->
+                        <div id="operatorPanel" class="operator-panel hidden">
+                            <hr style="border-color: #333; margin: 20px 0;">
+                            <div class="admin-option-info" style="margin-bottom: 15px;">
+                                <strong>👑 Gestión de Administradores</strong>
+                                <span style="color: #f39c12;">Solo Operador</span>
+                            </div>
+                            <div class="admin-add-form">
+                                <input type="email" id="newAdminEmail" placeholder="email@ejemplo.com" class="admin-input">
+                                <button id="addAdminBtn" class="admin-action-btn">
+                                    <i class="fas fa-user-plus"></i> Agregar Admin
+                                </button>
+                            </div>
+                            <div id="adminList" class="admin-list"></div>
+                        </div>
                     </div>
                 </div>
             </div>
