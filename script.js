@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const urlParams = new URLSearchParams(window.location.search);
     const adminKey = urlParams.get('admin');
     
-    if (adminKey === 'darkstudio_admin_2025') {
+    if (adminKey === (typeof ADMIN_CONFIG !== 'undefined' ? ADMIN_CONFIG.ADMIN_KEY : 'darkstudio_admin_2025')) {
         isAdminMode = true;
         sessionStorage.setItem('adminMode', 'true');
         console.log('🔑 Modo Administrador Activado');
@@ -22,6 +22,24 @@ document.addEventListener('DOMContentLoaded', () => {
     } else if (sessionStorage.getItem('adminMode') === 'true') {
         isAdminMode = true;
     }
+    
+    // Verificar permisos del usuario logueado
+    const checkAdminPermissions = () => {
+        const userEmail = localStorage.getItem('userEmail');
+        
+        if (!userEmail || !isAdminMode) {
+            return { isOperator: false, isAdmin: false };
+        }
+        
+        if (typeof isOperator === 'function' && typeof isAdmin === 'function') {
+            return {
+                isOperator: isOperator(userEmail),
+                isAdmin: isAdmin(userEmail)
+            };
+        }
+        
+        return { isOperator: false, isAdmin: false };
+    };
     
     // Verificar si hay un parámetro especial para activar/desactivar mantenimiento (solo admins)
     const maintenanceControl = urlParams.get('maintenance');
@@ -124,6 +142,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 // Configurar el toggle según el estado actual
                 updateMaintenanceToggle();
+                
+                // Verificar permisos del usuario actual
+                setTimeout(() => {
+                    setupAdminPanelPermissions();
+                }, 500);
             }
             
             // Mostrar toast informativo
@@ -136,6 +159,96 @@ document.addEventListener('DOMContentLoaded', () => {
             }, 1500);
         }, 1000);
     }
+    
+    // Configurar permisos y paneles del admin
+    const setupAdminPanelPermissions = () => {
+        const permissions = checkAdminPermissions();
+        const adminSupportPanel = document.getElementById('adminSupportPanel');
+        const operatorPanel = document.getElementById('operatorPanel');
+        
+        // Si es admin (logueado y verificado), mostrar panel de soporte
+        if (permissions.isAdmin && adminSupportPanel) {
+            adminSupportPanel.classList.remove('hidden');
+        }
+        
+        // Si es operador, mostrar panel de gestión de admins
+        if (permissions.isOperator && operatorPanel) {
+            operatorPanel.classList.remove('hidden');
+            loadAdminList();
+        }
+        
+        console.log('🔐 Permisos:', permissions);
+    };
+    
+    // Cargar lista de administradores
+    const loadAdminList = () => {
+        const adminList = document.getElementById('adminList');
+        if (!adminList || typeof ADMIN_CONFIG === 'undefined') return;
+        
+        adminList.innerHTML = '';
+        
+        ADMIN_CONFIG.ADMINS.forEach(email => {
+            const item = document.createElement('div');
+            item.className = 'admin-list-item';
+            if (email.toLowerCase() === ADMIN_CONFIG.OPERATOR.toLowerCase()) {
+                item.classList.add('operator');
+            }
+            
+            const span = document.createElement('span');
+            span.textContent = email + (email.toLowerCase() === ADMIN_CONFIG.OPERATOR.toLowerCase() ? ' (Operador)' : '');
+            
+            item.appendChild(span);
+            
+            // Solo agregar botón de remover si no es el operador
+            if (email.toLowerCase() !== ADMIN_CONFIG.OPERATOR.toLowerCase()) {
+                const removeBtn = document.createElement('button');
+                removeBtn.className = 'admin-remove-btn';
+                removeBtn.innerHTML = '<i class="fas fa-times"></i>';
+                removeBtn.onclick = () => removeAdminFromList(email);
+                item.appendChild(removeBtn);
+            }
+            
+            adminList.appendChild(item);
+        });
+    };
+    
+    // Agregar nuevo admin
+    const addAdminBtn = document.getElementById('addAdminBtn');
+    const newAdminEmail = document.getElementById('newAdminEmail');
+    
+    if (addAdminBtn && newAdminEmail) {
+        addAdminBtn.addEventListener('click', () => {
+            const email = newAdminEmail.value.trim();
+            if (!email) {
+                showToast('⚠️ Error', 'Ingresa un email válido', 'suggestion-error');
+                return;
+            }
+            
+            const operatorEmail = localStorage.getItem('userEmail');
+            const result = addAdmin(email, operatorEmail);
+            
+            if (result.success) {
+                showToast('✅ Éxito', result.message, 'suggestion-success');
+                newAdminEmail.value = '';
+                loadAdminList();
+            } else {
+                showToast('❌ Error', result.message, 'suggestion-error');
+            }
+        });
+    }
+    
+    // Remover admin
+    const removeAdminFromList = (email) => {
+        const operatorEmail = localStorage.getItem('userEmail');
+        const result = removeAdmin(email, operatorEmail);
+        
+        if (result.success) {
+            showToast('✅ Éxito', result.message, 'suggestion-success');
+            loadAdminList();
+        } else {
+            showToast('❌ Error', result.message, 'suggestion-error');
+        }
+    };
     
     // ===================================================
     // 0.1. CONTROL DE MANTENIMIENTO (SOLO ADMIN)
@@ -940,6 +1053,10 @@ document.addEventListener('DOMContentLoaded', () => {
         if (darkflashActive) {
             darkflashPanel.classList.remove('hidden');
             showDarkflashSection('menu');
+            // Cerrar dropdown de perfil si está abierto
+            if (dropdownMenu) {
+                dropdownMenu.classList.add('hidden');
+            }
         } else {
             darkflashPanel.classList.add('hidden');
         }
@@ -949,6 +1066,17 @@ document.addEventListener('DOMContentLoaded', () => {
         darkflashPanel.classList.add('hidden');
         darkflashActive = false;
     });
+    
+    // Cerrar DarkFlash cuando se abre el perfil
+    if (userProfileContainer) {
+        const originalProfileClick = userProfileContainer.onclick;
+        userProfileContainer.addEventListener('click', (e) => {
+            if (darkflashActive && darkflashPanel && !darkflashPanel.classList.contains('hidden')) {
+                darkflashPanel.classList.add('hidden');
+                darkflashActive = false;
+            }
+        });
+    }
     
     // Función para cambiar secciones
     const showDarkflashSection = (section) => {
